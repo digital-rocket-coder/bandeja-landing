@@ -63,10 +63,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero{padding-block:clamp(36px,6vw,72px) clamp(48px,6vw,80px)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:clamp(28px,4vw,56px);align-items:center}
 @media (max-width:920px){.hero-grid{grid-template-columns:1fr}}
-.hero h1{font-size:clamp(36px,5.6vw,72px);line-height:1.02;font-weight:700;margin-top:18px}
-.hero h1 .hl{position:relative;white-space:nowrap}
-.hero h1 .hl::after{content:"";position:absolute;left:-.05em;right:-.05em;bottom:.06em;height:.26em;background:var(--ball);z-index:-1;border-radius:3px;transform-origin:left;animation:sweep 1s .5s cubic-bezier(.2,.8,.2,1) both}
-@keyframes sweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero h1{font-size:clamp(32px,4.9vw,66px);line-height:1.04;font-weight:700;margin-top:18px}
+.hero h1 .hl{background:linear-gradient(var(--ball),var(--ball)) 0 88%/0% .26em no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding-inline:.04em;animation:sweep 1s .5s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes sweep{to{background-size:100% .26em}}
+@media (prefers-reduced-motion: reduce){.hero h1 .hl{background-size:100% .26em}}
+h1,h2,h3,p,li{overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto}
 .hero .lead{font-size:clamp(17px,1.7vw,20px);color:var(--muted);max-width:56ch;margin-top:22px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
 .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;text-decoration:none;font-size:15.5px;border:1.5px solid transparent;transition:transform .2s,background .2s}
@@ -75,8 +76,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .btn-ghost{border-color:var(--line);background:var(--surface)}
 .court-card{position:relative;border-radius:22px;overflow:hidden;background:var(--court-2);aspect-ratio:2/1.12;max-width:100%;box-shadow:0 30px 60px -30px rgba(10,31,46,.45)}
 .court-card canvas{display:block;width:100%;height:100%}
-.court-tag{position:absolute;left:14px;bottom:12px;font-family:var(--f-mono);font-size:11.5px;color:rgba(255,255,255,.82);letter-spacing:.06em}
-.court-tag b{color:#fff}
+.court-wrap{display:grid;gap:12px;min-width:0}
+.court-tag{font-family:var(--f-mono);font-size:12px;color:var(--muted);letter-spacing:.06em}
+.court-tag b{color:var(--ink)}
 
 /* stats strip */
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:clamp(40px,6vw,72px)}
@@ -85,6 +87,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .stat b{font-family:var(--f-display);font-size:clamp(26px,3.2vw,40px);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .stat span{color:var(--muted);font-size:14.5px;line-height:1.4}
 .stat small{font-family:var(--f-mono);font-size:11px;color:var(--muted);opacity:.85}
+@media (max-width:420px){.stat b{font-size:24px}.stat{padding-right:12px}.stat+.stat{padding-left:12px}.stat span{font-size:13.5px}}
 @media (max-width:820px){.stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){padding-left:0;border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}}
 
 /* idea */
@@ -100,6 +103,15 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .formula dt,.formula .k{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ball);padding-top:3px}
 .flywheel{width:100%;max-width:520px;margin:0 auto;display:block}
 .flywheel text{font-family:var(--f-body)}
+.cycle{display:none;list-style:none;margin:0;padding:0;gap:0}
+.cycle li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;padding:14px 0;position:relative}
+.cycle li::before{content:"";width:22px;height:22px;border-radius:50%;background:#F1C823;margin:2px 7px 0;box-shadow:inset -3px -3px 0 rgba(0,0,0,.15)}
+.cycle li+li::after{content:"";position:absolute;left:17px;top:-10px;height:22px;border-left:2px dashed rgba(241,200,35,.5)}
+.cycle b{display:block;font-size:17px}
+.cycle span{font-size:14.5px;color:rgba(234,241,246,.7)}
+.cycle .back{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:#F1C823;padding-left:50px}
+@media (max-width:600px){.flywheel{display:none}.cycle{display:grid}.cycle-back{display:block}}
+.cycle-back{display:none;margin-top:6px}
 
 /* problems */
 .prob-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
@@ -163,7 +175,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .board-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,44px) 64px;gap:6px;align-items:center;padding:10px 6px;border-bottom:1px solid rgba(255,255,255,.08)}
 .board-row:last-of-type{border-bottom:0}
 .board-row.head{font-size:10.5px;letter-spacing:.12em;color:rgba(242,246,249,.55);padding-block:4px}
-.board-row .tn{font-family:var(--f-body);font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;min-width:0}
+.board-row .tn{font-family:var(--f-body);font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;white-space:nowrap}
+@media (max-width:480px){.board{padding:12px 10px}.board-row{grid-template-columns:minmax(0,1fr) repeat(3,26px) 50px;gap:4px;padding-inline:2px}.board-row .c{font-size:15px}.board-row .pt{font-size:20px}.board-row.head span:first-child{font-size:0}.demo{padding:16px 12px}}
 .board-row .tn em{font-style:normal;width:8px;height:8px;border-radius:50%;background:#F1C823;opacity:0}
 .board-row.lead .tn em{opacity:1}
 .board-row .c{text-align:center;font-size:17px;color:rgba(242,246,249,.6);font-variant-numeric:tabular-nums}
@@ -210,7 +223,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .radar-wrap{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:18px;align-items:center}
 @media (max-width:560px){.radar-wrap{grid-template-columns:1fr}}
 .radar{width:100%;max-width:380px;display:block;margin:0 auto}
-.radar text{font-family:var(--f-body);font-size:11.5px;fill:var(--muted)}
+.radar text{font-family:var(--f-body);font-size:13px;fill:var(--muted)}
 .radar .grid{fill:none;stroke:var(--line)}
 .radar .now{fill:color-mix(in srgb,var(--turf) 28%,transparent);stroke:var(--turf);stroke-width:2}
 .radar .goal{fill:none;stroke:var(--ball);stroke-width:2;stroke-dasharray:5 4}
@@ -282,7 +295,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .mk b{font-family:var(--f-display);font-size:clamp(30px,3.6vw,44px);font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .mk span{color:var(--muted);font-size:15px}
 .growchart{margin-top:30px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;overflow-x:auto}
-.growchart svg{display:block;width:100%;min-width:520px;height:auto}
+.growchart svg{display:block;width:100%;height:auto}
+@media (max-width:600px){.growchart{padding:14px 8px}.growchart text{font-size:21px!important}.growchart .yl{display:none}}
 .growchart text{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
 
 /* final */
@@ -317,7 +331,7 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
 </head>
 <body>
 
-<header class="nav">
+<header class="nav" lang="ru">
   <div class="wrap">
     <a class="logo" href="#top"><i></i>Bandeja</a>
     <ul>
@@ -331,7 +345,7 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
   </div>
 </header>
 
-<main id="top">
+<main id="top" lang="ru">
 <!-- HERO -->
 <section class="hero">
   <div class="wrap">
@@ -346,8 +360,10 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
           <a class="btn btn-ghost" href="#product">Посмотреть продукт</a>
         </div>
       </div>
-      <div class="court-card" aria-label="Анимация: розыгрыш на корте для падела, вид сверху">
-        <canvas id="court"></canvas>
+      <div class="court-wrap">
+        <div class="court-card" aria-label="Анимация: розыгрыш на корте для падела, вид сверху">
+          <canvas id="court"></canvas>
+        </div>
         <div class="court-tag"><b>КОРТ 20 × 10 М</b> · стекло и сетка — часть игры</div>
       </div>
     </div>
@@ -396,6 +412,13 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
           <text x="260" y="276" fill="rgba(255,255,255,.6)" font-size="13">каждый круг — новый платный шаг</text>
         </g>
       </svg>
+      <ol class="cycle" aria-label="Как игрок движется по платформе">
+        <li><div><b>Учится онлайн</b><span>Бесплатный старт, затем платный курс</span></div></li>
+        <li><div><b>Идёт к тренеру</b><span>Тренер видит историю обучения и задачи</span></div></li>
+        <li><div><b>Играет и соревнуется</b><span>Партнёры, клубы, турниры</span></div></li>
+        <li><div><b>Получает новую цель</b><span>Разбор и следующий этап программы</span></div></li>
+      </ol>
+      <p class="back cycle-back">↻ И снова за обучением. Каждый круг — новый платный шаг</p>
     </div>
   </div>
 </section>
@@ -515,7 +538,7 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
           <li>Форматы: классическое «больше-меньше» и золотое очко</li>
           <li>Ввод проверяем в реальной игре, когда в руке ракетка</li>
         </ul>
-        <p style="font-size:14.5px">Попробуйте: нажимайте кнопки команд справа.</p>
+        <p style="font-size:14.5px">Попробуйте сами: нажимайте кнопки команд в демо.</p>
       </div>
       <div class="demo rv"><span class="demo-label">Работает</span>
         <div class="board" aria-live="polite">
@@ -686,12 +709,12 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
       <div class="mk"><b>225</b><span>турниров в год проводит ФПР: спрос на подготовку к соревнованиям уже есть</span></div>
     </div>
     <div class="growchart rv">
-      <svg viewBox="0 0 640 230" role="img" aria-label="Число падел-кортов в России: 2021 около 9, октябрь 2025 — 568, прогноз 2030 — 2135">
+      <svg viewBox="0 0 640 232" role="img" aria-label="Число падел-кортов в России: 2021 около 9, октябрь 2025 — 568, прогноз 2030 — 2135">
         <line x1="60" y1="190" x2="620" y2="190" stroke="var(--line)"/>
         <line x1="60" y1="140" x2="620" y2="140" stroke="var(--line)" stroke-dasharray="3 5"/>
         <line x1="60" y1="90" x2="620" y2="90" stroke="var(--line)" stroke-dasharray="3 5"/>
         <line x1="60" y1="40" x2="620" y2="40" stroke="var(--line)" stroke-dasharray="3 5"/>
-        <text x="50" y="194" text-anchor="end">0</text><text x="50" y="144" text-anchor="end">700</text><text x="50" y="94" text-anchor="end">1 400</text><text x="50" y="44" text-anchor="end">2 100</text>
+        <g class="yl"><text x="50" y="194" text-anchor="end">0</text><text x="50" y="144" text-anchor="end">700</text><text x="50" y="94" text-anchor="end">1 400</text><text x="50" y="44" text-anchor="end">2 100</text></g>
         <!-- scale: 0..2100 -> 190..40 ; x: 2021=90, 2025=330, 2030=600 -->
         <path d="M90 189.4 L330 149.4" stroke="var(--turf)" stroke-width="3" fill="none"/>
         <path d="M330 149.4 L600 37.5" stroke="var(--turf)" stroke-width="3" fill="none" stroke-dasharray="6 6"/>
@@ -699,7 +722,7 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
         <circle cx="90" cy="189.4" r="5" fill="var(--turf)"/>
         <circle cx="330" cy="149.4" r="7" fill="var(--ball)" stroke="var(--surface)" stroke-width="2"/>
         <circle cx="600" cy="37.5" r="5" fill="var(--surface)" stroke="var(--turf)" stroke-width="2.5"/>
-        <text x="90" y="212" text-anchor="middle">2021</text><text x="330" y="212" text-anchor="middle">окт. 2025</text><text x="600" y="212" text-anchor="middle">2030 (прогноз)</text>
+        <text x="70" y="218" text-anchor="start">2021</text><text x="330" y="218" text-anchor="middle">окт. 2025</text><text x="625" y="218" text-anchor="end">2030, прогноз</text>
         <text x="96" y="176" fill="var(--ink)">≈9</text>
         <text x="330" y="133" text-anchor="middle" fill="var(--ink)" font-weight="600" style="font-size:13px">568 кортов</text>
         <text x="592" y="26" text-anchor="end" fill="var(--ink)" font-weight="600" style="font-size:13px">2 135</text>
@@ -752,7 +775,7 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
 </section>
 </main>
 
-<footer>
+<footer lang="ru">
   <div class="wrap">
     <span class="mono">Bandeja — рабочее название. Бандеха — фирменный удар падела над головой.</span>
     <span>Источники цифр:</span>
