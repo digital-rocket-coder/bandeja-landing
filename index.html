@@ -6,6 +6,7 @@
 <meta name="description" content="Bandeja — платформа обучения паделу: от первого удара до первого турнира.">
 <meta property="og:title" content="Bandeja — падел-платформа">
 <meta property="og:description" content="Онлайн-школа и цифровой помощник игрока в паделе.">
+<meta property="og:image" content="lesson-poster.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Bandeja — падел-платформа</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -144,8 +145,30 @@ h1,h2,h3,p,li{overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto}
 .pill.mod{background:var(--turf);color:var(--turf-ink)}
 
 /* product features */
+.lesson{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(28px,5vw,72px);align-items:center;padding-bottom:clamp(36px,5vw,64px)}
+@media (max-width:900px){.lesson{grid-template-columns:1fr}.lesson .phone-wrap{order:-1}}
+.phone-wrap{display:grid;justify-items:center;gap:14px}
+.phone{position:relative;width:min(320px,82vw);aspect-ratio:9/16;border-radius:38px;border:10px solid #0B1B28;background:#0B1B28;overflow:hidden;box-shadow:0 40px 70px -35px rgba(10,31,46,.55),0 0 0 1px var(--line);max-width:100%}
+.phone video{width:100%;height:100%;object-fit:cover;display:block;background:#0B1B28}
+.phone::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:70px;height:18px;border-radius:12px;background:#0B1B28;z-index:2}
+.play{all:unset;position:absolute;inset:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(180deg,transparent 55%,rgba(7,21,33,.55));z-index:1}
+.play span{width:76px;height:76px;border-radius:50%;background:var(--ball);display:grid;place-items:center;box-shadow:0 12px 30px -8px rgba(0,0,0,.5);transition:transform .2s}
+.play:hover span{transform:scale(1.08)}
+.play:focus-visible span{outline:3px solid #fff;outline-offset:4px}
+.play small{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#fff;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em}
+.chapters{display:grid;gap:8px;margin-top:6px}
+.chap{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center;padding:13px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);transition:border-color .2s,background .2s}
+.chap:hover{border-color:var(--turf)}
+.chap:focus-visible{outline:3px solid var(--ball);outline-offset:2px}
+.chap .tc{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.chap b{font-weight:600;font-size:16px}
+.chap span.d{display:block;font-size:13.5px;color:var(--muted);font-weight:400}
+.chap .ar{font-family:var(--f-mono);font-size:12px;color:var(--turf)}
+.chap.on{border-color:var(--turf);background:color-mix(in srgb,var(--turf) 9%,var(--surface))}
+.chap.on .ar{color:var(--ink)}
+.after{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:center;padding-block:clamp(36px,5vw,64px);border-top:1px solid var(--line)}
-.feat:first-of-type{border-top:0;padding-top:0}
+.feat:first-of-type{padding-top:clamp(36px,5vw,64px)}
 .feat.flip .copy{order:2}
 @media (max-width:900px){.feat{grid-template-columns:1fr}.feat.flip .copy{order:0}}
 .copy{display:grid;gap:16px;min-width:0}
@@ -510,6 +533,29 @@ footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
       <div class="eyebrow">Продукт</div>
       <h2>Приложение, которое нужно и на уроке, и на корте, и после игры</h2>
       <p>Обучение даёт причину купить. Инструменты для корта дают причину открывать приложение каждую неделю, между уроками.</p>
+    </div>
+
+    <!-- lesson video -->
+    <div class="lesson" id="lesson">
+      <div class="copy rv">
+        <div class="eyebrow">Обучение · пример урока</div>
+        <h3>Так выглядит урок: три главных удара над головой</h3>
+        <p>Реальный урок от тренера по паделу. Короткие главы, разбор на пальцах и демонстрация на корте. Из таких уроков собирается этап «Базовая игра».</p>
+        <div class="chapters" role="list">
+          <button class="chap" type="button" data-t="0" role="listitem"><span class="tc">0:00</span><span><b>Вступление</b><span class="d">Три главных удара в паделе</span></span><span class="ar">▶</span></button>
+          <button class="chap" type="button" data-t="16" role="listitem"><span class="tc">0:16</span><span><b>Смэш</b><span class="d">Мощный завершающий удар над головой</span></span><span class="ar">▶</span></button>
+          <button class="chap" type="button" data-t="46" role="listitem"><span class="tc">0:46</span><span><b>Вибора</b><span class="d">Резаный удар с вращением</span></span><span class="ar">▶</span></button>
+          <button class="chap" type="button" data-t="67" role="listitem"><span class="tc">1:07</span><span><b>Бандеха</b><span class="d">Удар, который держит позицию у сетки</span></span><span class="ar">▶</span></button>
+        </div>
+        <p style="font-size:15px">После урока в приложении:</p>
+        <div class="after"><span class="chip">Упражнение в личный план</span><span class="chip">Вопрос аватару тренера</span><span class="chip">Загрузить своё видео на разбор</span></div>
+      </div>
+      <div class="phone-wrap rv">
+        <div class="phone">
+          <video id="lessonVideo" src="lesson.mp4" poster="lesson-poster.jpg" playsinline preload="metadata" aria-label="Пример урока: смэш, вибора и бандеха"></video>
+          <button class="play" id="lessonPlay" type="button" aria-label="Смотреть урок"><span><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M9 6l14 8-14 8z" fill="#1A1600"/></svg></span><small>СМОТРЕТЬ УРОК · 1:53</small></button>
+        </div>
+      </div>
     </div>
 
     <!-- rules AI -->
@@ -1019,6 +1065,15 @@ function vid(tm){
   if(!RM) requestAnimationFrame(vid);
 }
 requestAnimationFrame(vid);
+
+
+/* ---------- LESSON VIDEO ---------- */
+const lv=document.getElementById('lessonVideo'), lp=document.getElementById('lessonPlay'), chaps=[...document.querySelectorAll('.chap')];
+const startAt=t=>{try{lv.currentTime=t;}catch(e){} lp.hidden=true; const pr=lv.play(); if(pr&&pr.catch) pr.catch(()=>{});};
+lp.addEventListener('click',()=>startAt(lv.currentTime||0));
+chaps.forEach(c=>c.addEventListener('click',()=>{startAt(+c.dataset.t); if(innerWidth<900) lv.closest('.phone').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});}));
+lv.addEventListener('play',()=>{lp.hidden=true; lv.controls=true;});
+lv.addEventListener('timeupdate',()=>{const t=lv.currentTime; let k=0; chaps.forEach((c,i)=>{if(t>=+c.dataset.t-.2)k=i;}); chaps.forEach((c,i)=>c.classList.toggle('on',i===k));});
 
 /* ---------- RADAR ---------- */
 const rd=document.getElementById('radar'), axes=['Атака','Защита','Стабильность','Перемещения','Тактика','Игра в паре'];
