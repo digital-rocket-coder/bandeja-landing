@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Bandeja — платформа обучения паделу: от первого удара до первого турнира.">
+<meta property="og:title" content="Bandeja — падел-платформа">
+<meta property="og:description" content="Онлайн-школа и цифровой помощник игрока в паделе.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Bandeja — падел-платформа</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: court geometry — content framed by thin court lines; hero carries a live top-down padel court as the signature moment */
+:root{
+  --bg:#EEF2F5; --surface:#FFFFFF; --ink:#0A1F2E; --muted:#526472; --line:#CBD6DF;
+  --turf:#1D5BA3; --turf-ink:#FFFFFF; --ball:#F1C823; --ball-ink:#1A1600;
+  --court:#1E5AA0; --court-2:#174C89; --court-line:#FFFFFF; --glass:rgba(220,240,255,.55);
+  --soft:#E2EAF1; --ok:#1F8A5B; --deep:#0A1F2E;
+  --f-display:"Unbounded","Onest",system-ui,sans-serif;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:14px; --max:1180px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#071521; --surface:#0D2131; --ink:#E8F0F6; --muted:#90A5B5; --line:#1D3A50;
+  --turf:#5C9BE6; --turf-ink:#071521; --ball:#F3CF32; --ball-ink:#1A1600;
+  --court:#164A86; --court-2:#113C6E; --glass:rgba(190,225,255,.45); --soft:#11293C; --ok:#4CC18B; --deep:#0F2A42; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#071521; --surface:#0D2131; --ink:#E8F0F6; --muted:#90A5B5; --line:#1D3A50;
+  --turf:#5C9BE6; --turf-ink:#071521; --ball:#F3CF32; --ball-ink:#1A1600;
+  --court:#164A86; --court-2:#113C6E; --glass:rgba(190,225,255,.45); --soft:#11293C; --ok:#4CC18B; --deep:#0F2A42; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ball);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--turf);font-weight:600}
+.mono{font-family:var(--f-mono)}
+section{padding-block:clamp(64px,9vw,120px)}
+.sec-head{display:grid;gap:16px;max-width:780px;margin-bottom:clamp(32px,5vw,56px)}
+.sec-head h2{font-size:clamp(28px,4.2vw,48px);line-height:1.08;font-weight:600}
+.sec-head p{color:var(--muted);font-size:clamp(17px,1.6vw,19px);max-width:62ch}
+
+/* nav */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:18px;text-decoration:none;letter-spacing:-.01em}
+.logo i{width:18px;height:18px;border-radius:50%;background:var(--ball);box-shadow:inset -3px -3px 0 rgba(0,0,0,.12);display:block}
+.nav ul{display:flex;gap:22px;list-style:none;margin:0 0 0 auto;padding:0;font-size:14.5px;color:var(--muted)}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{color:var(--ink)}
+@media (max-width:860px){.nav ul{display:none}}
+
+/* hero */
+.hero{padding-block:clamp(36px,6vw,72px) clamp(48px,6vw,80px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:clamp(28px,4vw,56px);align-items:center}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(36px,5.6vw,72px);line-height:1.02;font-weight:700;margin-top:18px}
+.hero h1 .hl{position:relative;white-space:nowrap}
+.hero h1 .hl::after{content:"";position:absolute;left:-.05em;right:-.05em;bottom:.06em;height:.26em;background:var(--ball);z-index:-1;border-radius:3px;transform-origin:left;animation:sweep 1s .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes sweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero .lead{font-size:clamp(17px,1.7vw,20px);color:var(--muted);max-width:56ch;margin-top:22px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;text-decoration:none;font-size:15.5px;border:1.5px solid transparent;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--ink);color:var(--bg)}
+.btn-ghost{border-color:var(--line);background:var(--surface)}
+.court-card{position:relative;border-radius:22px;overflow:hidden;background:var(--court-2);aspect-ratio:2/1.12;max-width:100%;box-shadow:0 30px 60px -30px rgba(10,31,46,.45)}
+.court-card canvas{display:block;width:100%;height:100%}
+.court-tag{position:absolute;left:14px;bottom:12px;font-family:var(--f-mono);font-size:11.5px;color:rgba(255,255,255,.82);letter-spacing:.06em}
+.court-tag b{color:#fff}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:clamp(40px,6vw,72px)}
+.stat{padding:22px 20px 22px 0;display:grid;gap:6px;align-content:start}
+.stat+.stat{padding-left:20px;border-left:1px solid var(--line)}
+.stat b{font-family:var(--f-display);font-size:clamp(26px,3.2vw,40px);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat span{color:var(--muted);font-size:14.5px;line-height:1.4}
+.stat small{font-family:var(--f-mono);font-size:11px;color:var(--muted);opacity:.85}
+@media (max-width:820px){.stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){padding-left:0;border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* idea */
+.idea{background:var(--deep);color:#EAF1F6}
+.idea .eyebrow{color:var(--ball)}
+
+.idea-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center}
+@media (max-width:920px){.idea-grid{grid-template-columns:1fr}}
+.pitch{font-family:var(--f-display);font-size:clamp(22px,2.6vw,32px);line-height:1.28;font-weight:500}
+.pitch mark{background:none;color:var(--ball)}
+.formula{display:grid;gap:12px;margin-top:32px}
+.formula div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;padding:14px 0;border-top:1px solid rgba(255,255,255,.14);font-size:16px}
+.formula dt,.formula .k{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ball);padding-top:3px}
+.flywheel{width:100%;max-width:520px;margin:0 auto;display:block}
+.flywheel text{font-family:var(--f-body)}
+
+/* problems */
+.prob-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media (max-width:760px){.prob-grid{grid-template-columns:1fr}}
+.prob{background:var(--surface);padding:clamp(22px,3vw,34px);display:grid;gap:12px;align-content:start;min-width:0}
+.prob h3{font-size:20px;font-weight:600;line-height:1.2}
+.prob p{color:var(--muted)}
+.prob .ico{width:44px;height:44px}
+.quote-line{margin-top:28px;display:flex;flex-wrap:wrap;gap:14px 28px;align-items:baseline;color:var(--muted);font-size:15px}
+.quote-line b{font-family:var(--f-display);color:var(--ink);font-size:28px;font-weight:600}
+
+/* path */
+.track{position:relative;margin:8px 0 28px;height:46px}
+.track .line{position:absolute;left:0;right:0;top:22px;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 10px,transparent 10px 18px)}
+.track .ballmark{position:absolute;top:10px;width:26px;height:26px;border-radius:50%;background:var(--ball);box-shadow:inset -4px -4px 0 rgba(0,0,0,.12),0 6px 14px -4px rgba(0,0,0,.3);transition:left .8s cubic-bezier(.5,0,.2,1);transform:translateX(-50%)}
+.track .ballmark::after{content:"";position:absolute;inset:3px;border-radius:50%;border:2px solid rgba(255,255,255,.6);border-left-color:transparent;border-bottom-color:transparent;transform:rotate(30deg)}
+.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.stages{grid-template-columns:1fr 1fr}.track{display:none}}
+@media (max-width:520px){.stages{grid-template-columns:1fr}}
+.stage{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:12px;align-content:start;transition:border-color .3s,transform .3s,box-shadow .3s;min-width:0}
+.stage:hover{transform:translateY(-3px)}
+.stage:focus-visible{outline:3px solid var(--ball);outline-offset:3px}
+.stage.on{border-color:var(--turf);box-shadow:0 18px 40px -24px color-mix(in srgb,var(--turf) 70%,transparent)}
+.stage .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);letter-spacing:.08em}
+.stage h3{font-size:19px;font-weight:600;line-height:1.2}
+.stage p{color:var(--muted);font-size:15px}
+.stage .res{font-size:15px;border-top:1px dashed var(--line);padding-top:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;justify-self:start;font-family:var(--f-mono);font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:var(--soft);color:var(--ink)}
+.pill.free{background:var(--ball);color:var(--ball-ink)}
+.pill.mod{background:var(--turf);color:var(--turf-ink)}
+
+/* product features */
+.feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:center;padding-block:clamp(36px,5vw,64px);border-top:1px solid var(--line)}
+.feat:first-of-type{border-top:0;padding-top:0}
+.feat.flip .copy{order:2}
+@media (max-width:900px){.feat{grid-template-columns:1fr}.feat.flip .copy{order:0}}
+.copy{display:grid;gap:16px;min-width:0}
+.copy h3{font-size:clamp(24px,2.8vw,34px);font-weight:600;line-height:1.12}
+.copy p{color:var(--muted)}
+.copy ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.copy li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;font-size:15.5px}
+.copy li::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--ball);margin-top:8px;box-shadow:0 0 0 3px color-mix(in srgb,var(--ball) 30%,transparent)}
+.demo{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(16px,2.4vw,26px);min-width:0;position:relative}
+.demo-label{position:absolute;top:-11px;right:18px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--bg);border:1px solid var(--line);padding:3px 9px;border-radius:999px;color:var(--muted)}
+
+/* chat */
+.chat{display:grid;gap:12px;min-height:330px;align-content:start}
+.msg{max-width:88%;padding:12px 15px;border-radius:16px;font-size:15px;line-height:1.45;animation:pop .35s ease both}
+.msg.u{justify-self:end;background:var(--turf);color:var(--turf-ink);border-bottom-right-radius:4px}
+.msg.a{justify-self:start;background:var(--soft);border-bottom-left-radius:4px}
+.msg.a .src{display:block;margin-top:8px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.msg.a .verdict{display:inline-block;font-weight:600;background:var(--ball);color:var(--ball-ink);padding:1px 8px;border-radius:6px;margin-bottom:6px}
+.typing{justify-self:start;display:flex;gap:5px;padding:14px 16px;background:var(--soft);border-radius:16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes pop{from{transform:translateY(8px) scale(.98)}to{transform:none}}
+
+/* scoreboard */
+.board{background:#0B1B28;color:#F2F6F9;border-radius:16px;padding:18px;font-family:var(--f-mono)}
+.board-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,44px) 64px;gap:6px;align-items:center;padding:10px 6px;border-bottom:1px solid rgba(255,255,255,.08)}
+.board-row:last-of-type{border-bottom:0}
+.board-row.head{font-size:10.5px;letter-spacing:.12em;color:rgba(242,246,249,.55);padding-block:4px}
+.board-row .tn{font-family:var(--f-body);font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;min-width:0}
+.board-row .tn em{font-style:normal;width:8px;height:8px;border-radius:50%;background:#F1C823;opacity:0}
+.board-row.lead .tn em{opacity:1}
+.board-row .c{text-align:center;font-size:17px;color:rgba(242,246,249,.6);font-variant-numeric:tabular-nums}
+.board-row .c.cur{color:#fff}
+.board-row .pt{text-align:center;font-size:24px;font-weight:600;background:#F1C823;color:#1A1600;border-radius:8px;padding:4px 0;font-variant-numeric:tabular-nums;transition:transform .15s}
+.board-row .pt.bump{transform:scale(1.15)}
+.board-status{font-size:12px;color:rgba(242,246,249,.65);padding:10px 6px 0;min-height:28px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.controls button,.ctl-row button{font:inherit;cursor:pointer;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:14px 10px;font-weight:600;font-size:15px;display:flex;gap:10px;align-items:center;justify-content:center;transition:transform .1s,background .2s}
+.controls button:active{transform:scale(.97)}
+.controls button .dot{width:20px;height:20px;border-radius:50%;background:var(--ball);box-shadow:inset -3px -3px 0 rgba(0,0,0,.12)}
+.ctl-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.ctl-row button{padding:9px 14px;font-size:13.5px;font-weight:500;flex:1}
+.ctl-row button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* avatar */
+.avatar{display:grid;gap:14px}
+.av-head{display:flex;gap:14px;align-items:center}
+.av-pic{width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--ball),color-mix(in srgb,var(--ball) 50%,var(--turf)));position:relative;flex:none}
+.av-pic::after{content:"ИИ";position:absolute;right:-4px;bottom:-4px;font-family:var(--f-mono);font-size:10px;font-weight:600;background:var(--ink);color:var(--bg);padding:2px 5px;border-radius:6px}
+.av-head b{display:block;font-size:16px}
+.av-head span{font-size:13.5px;color:var(--muted)}
+.handoff{display:flex;align-items:center;gap:10px;font-size:14px;border:1.5px dashed var(--turf);border-radius:12px;padding:12px 14px;color:var(--ink)}
+.handoff svg{flex:none}
+
+/* video */
+.video{border-radius:14px;overflow:hidden;background:var(--court-2);aspect-ratio:16/9;position:relative;max-width:100%}
+.video canvas{width:100%;height:100%;display:block}
+.vmark{position:absolute;border:2px solid var(--ball);border-radius:10px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(241,200,35,.5)}50%{box-shadow:0 0 0 10px rgba(241,200,35,0)}}
+.vtip{position:absolute;background:rgba(7,21,33,.88);color:#EAF2F8;font-size:12.5px;padding:7px 10px;border-radius:8px;max-width:58%}
+.timeline{position:relative;height:34px;margin-top:14px}
+.timeline .bar{position:absolute;left:0;right:0;top:15px;height:4px;border-radius:2px;background:var(--soft)}
+.timeline .prog{position:absolute;left:0;top:15px;height:4px;border-radius:2px;background:var(--turf);width:0;animation:play 9s linear infinite}
+@keyframes play{to{width:100%}}
+.timeline .m{position:absolute;top:8px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:3px solid var(--surface)}
+.timeline .m.g{background:var(--ok)}.timeline .m.w{background:var(--ball)}
+.vnotes{display:grid;gap:8px;margin-top:10px}
+.vnote{display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;font-size:14.5px;padding:10px 0;border-top:1px solid var(--line)}
+.vnote .t{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.vnote b{font-weight:600}
+
+/* radar */
+.radar-wrap{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:18px;align-items:center}
+@media (max-width:560px){.radar-wrap{grid-template-columns:1fr}}
+.radar{width:100%;max-width:380px;display:block;margin:0 auto}
+.radar text{font-family:var(--f-body);font-size:11.5px;fill:var(--muted)}
+.radar .grid{fill:none;stroke:var(--line)}
+.radar .now{fill:color-mix(in srgb,var(--turf) 28%,transparent);stroke:var(--turf);stroke-width:2}
+.radar .goal{fill:none;stroke:var(--ball);stroke-width:2;stroke-dasharray:5 4}
+.radar .grow{transform-origin:190px 160px;transform:scale(.2);transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.radar.in .grow{transform:scale(1)}
+.legend{display:grid;gap:10px;font-size:14px}
+.legend div{display:flex;gap:10px;align-items:center}
+.legend i{width:22px;height:4px;border-radius:2px;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{font-size:13px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
+.chip.done{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* matches */
+.matches{display:grid;gap:10px}
+.match{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.match .when{font-family:var(--f-mono);font-size:12.5px;text-align:center;line-height:1.25;color:var(--muted)}
+.match .when b{display:block;font-size:18px;color:var(--ink)}
+.match .what b{display:block;font-size:15px}
+.match .what span{font-size:13.5px;color:var(--muted)}
+.lvl{font-family:var(--f-mono);font-size:12px;padding:5px 9px;border-radius:8px;background:var(--soft);white-space:nowrap}
+.lvl.fit{background:var(--ball);color:var(--ball-ink)}
+
+/* sides */
+.sides{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.sides{grid-template-columns:1fr}}
+.side{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(22px,3vw,32px);display:grid;gap:16px;align-content:start;min-width:0}
+.side .who{display:flex;align-items:center;gap:12px}
+.side .who svg{flex:none}
+.side h3{font-size:21px;font-weight:600}
+.side .gets{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--turf)}
+.side ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.side li{padding-top:10px;border-top:1px solid var(--line);font-size:15.5px}
+
+/* money */
+.funnel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+@media (max-width:900px){.funnel{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.funnel{grid-template-columns:1fr}}
+.tier{padding:26px 22px;display:grid;gap:12px;align-content:start;background:var(--surface);border-right:1px solid var(--line);min-width:0;position:relative}
+.tier:last-child{border-right:0}
+@media (max-width:900px){.tier{border-bottom:1px solid var(--line)}}
+.tier .k{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tier h3{font-size:20px;font-weight:600}
+.tier p{font-size:15px;color:var(--muted)}
+.tier .bar{height:6px;border-radius:3px;background:var(--soft);overflow:hidden}
+.tier .bar span{display:block;height:100%;background:var(--turf);border-radius:3px}
+.tier.t0 .bar span{background:var(--ball)}
+.note{margin-top:18px;font-size:14.5px;color:var(--muted);max-width:70ch}
+
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;counter-reset:ph}
+@media (max-width:900px){.road{grid-template-columns:1fr}}
+.phase{border-top:3px solid var(--line);padding-top:20px;display:grid;gap:12px;align-content:start;min-width:0}
+.phase.now{border-top-color:var(--ball)}
+.phase .k{font-family:var(--f-mono);font-size:12px;color:var(--muted);letter-spacing:.08em}
+.phase h3{font-size:21px;font-weight:600}
+.phase ul{margin:0;padding-left:18px;color:var(--muted);display:grid;gap:6px;font-size:15.5px}
+.metrics{margin-top:clamp(36px,5vw,56px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(22px,3vw,32px);display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px}
+@media (max-width:760px){.metrics{grid-template-columns:1fr}}
+.metrics h3{font-size:19px;font-weight:600}
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:520px){.mgrid{grid-template-columns:1fr}}
+.mgrid div{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;font-size:15.5px}
+.mgrid svg{margin-top:2px}
+
+/* market */
+.market{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.market{grid-template-columns:1fr}}
+.mk{padding:24px 0;border-top:1px solid var(--line);display:grid;gap:8px;align-content:start}
+.mk b{font-family:var(--f-display);font-size:clamp(30px,3.6vw,44px);font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.mk span{color:var(--muted);font-size:15px}
+.growchart{margin-top:30px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;overflow-x:auto}
+.growchart svg{display:block;width:100%;min-width:520px;height:auto}
+.growchart text{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+
+/* final */
+.final{background:var(--court);color:#fff;position:relative;overflow:hidden}
+.final::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(90deg,transparent calc(50% - 1px),rgba(255,255,255,.5) calc(50% - 1px),rgba(255,255,255,.5) calc(50% + 1px),transparent calc(50% + 1px)),
+  linear-gradient(90deg,transparent 15%,rgba(255,255,255,.22) 15%,rgba(255,255,255,.22) calc(15% + 2px),transparent calc(15% + 2px),transparent 85%,rgba(255,255,255,.22) 85%,rgba(255,255,255,.22) calc(85% + 2px),transparent calc(85% + 2px));pointer-events:none}
+.final .wrap{position:relative;display:grid;gap:22px;max-width:900px;text-align:left}
+.final .eyebrow{color:#F1C823}
+.final h2{font-size:clamp(30px,4.6vw,56px);line-height:1.05;font-weight:700}
+.final p{font-size:clamp(17px,1.7vw,20px);color:rgba(255,255,255,.85);max-width:60ch}
+.asks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:8px}
+@media (max-width:760px){.asks{grid-template-columns:1fr}}
+.ask{background:rgba(7,21,33,.35);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px;display:grid;gap:6px}
+.ask b{font-size:16px}
+.ask span{font-size:14.5px;color:rgba(255,255,255,.78)}
+
+footer{padding-block:36px;font-size:13px;color:var(--muted)}
+footer .wrap{display:grid;gap:10px}
+footer ol{margin:0;padding-left:18px;display:grid;gap:4px}
+
+/* reveal: transform-only, content is always visible */
+@supports (animation-timeline: view()){
+  .rv{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
+  @keyframes rise{from{transform:translateY(36px)}to{transform:none}}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><i></i>Bandeja</a>
+    <ul>
+      <li><a href="#idea">Идея</a></li>
+      <li><a href="#problem">Проблема</a></li>
+      <li><a href="#path">Путь игрока</a></li>
+      <li><a href="#product">Продукт</a></li>
+      <li><a href="#market">Рынок</a></li>
+      <li><a href="#launch">Запуск</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Платформа обучения паделу · для партнёров и инвесторов</div>
+        <h1>От первого удара до <span class="hl">первого турнира</span></h1>
+        <p class="lead">Bandeja — онлайн-школа и цифровой помощник игрока. Курсы проверенных тренеров, ИИ-разбор правил и видео, счёт на корте и запись на очные тренировки в одном приложении.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#idea">Идея за 30 секунд
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn btn-ghost" href="#product">Посмотреть продукт</a>
+        </div>
+      </div>
+      <div class="court-card" aria-label="Анимация: розыгрыш на корте для падела, вид сверху">
+        <canvas id="court"></canvas>
+        <div class="court-tag"><b>КОРТ 20 × 10 М</b> · стекло и сетка — часть игры</div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat"><b data-count="58334">58 334</b><span>корта в мире, в 6 раз больше, чем в 2016</span><small>Playtomic × PwC, 2025</small></div>
+      <div class="stat"><b>19,4 млн</b><span>игроков в мире</span><small>Playtomic × PwC, 2025</small></div>
+      <div class="stat"><b>×60</b><span>рост числа кортов в России с 2021 года, до 568</span><small>Ведомости, окт. 2025</small></div>
+      <div class="stat"><b data-count="100000" data-prefix="~">~100 000</b><span>игроков в России, прогноз на 2030 год — 512 400</span><small>Ведомости, 2025</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- IDEA -->
+<section class="idea" id="idea">
+  <div class="wrap">
+    <div class="idea-grid">
+      <div class="rv">
+        <div class="eyebrow">Идея за 30 секунд</div>
+        <p class="pitch" style="margin-top:20px">Интерес к паделу растёт быстрее, чем доступ к хорошему обучению. Мы <mark>превращаем методику сильных тренеров в цифровой продукт</mark>: игрок учится системно и дешевле, тренер продаёт свой подход сотням учеников, клубы получают подготовленных игроков.</p>
+        <div class="formula">
+          <div><span class="k">Игроку</span><span>Понятная программа, обратная связь и помощь прямо на корте</span></div>
+          <div><span class="k">Тренеру</span><span>Продажа авторских курсов, репутация и поток учеников на очные занятия</span></div>
+          <div><span class="k">Клубу</span><span>Игроки, которые бронируют корты, и участники турниров</span></div>
+        </div>
+      </div>
+      <svg class="flywheel rv" viewBox="0 0 520 520" role="img" aria-label="Маховик: игрок учится онлайн, идёт к тренеру, тренер растит репутацию, клубы и турниры дают новые цели, игрок возвращается к обучению">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#F1C823"/></marker>
+        </defs>
+        <circle cx="260" cy="260" r="170" fill="none" stroke="rgba(241,200,35,.25)" stroke-width="2" stroke-dasharray="4 8"/>
+        <path id="orbit" d="M260 90 A170 170 0 1 1 259.9 90" fill="none"/>
+        <g fill="none" stroke="#F1C823" stroke-width="2.5" marker-end="url(#ar)">
+          <path d="M318 100 A170 170 0 0 1 418 196"/>
+          <path d="M428 318 A170 170 0 0 1 340 412"/>
+          <path d="M200 420 A170 170 0 0 1 100 324"/>
+          <path d="M94 204 A170 170 0 0 1 196 100"/>
+        </g>
+        <circle r="10" fill="#F1C823"><animateMotion dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#orbit"/></animateMotion></circle>
+        <g text-anchor="middle">
+          <g transform="translate(260 72)"><rect x="-92" y="-26" width="184" height="52" rx="26" fill="#0D2131" stroke="rgba(255,255,255,.2)"/><text y="-3" fill="#fff" font-weight="600" font-size="15">Учится онлайн</text><text y="15" fill="rgba(255,255,255,.6)" font-size="11.5">бесплатный старт → курс</text></g>
+          <g transform="translate(448 260)"><rect x="-70" y="-26" width="140" height="52" rx="26" fill="#0D2131" stroke="rgba(255,255,255,.2)"/><text y="-3" fill="#fff" font-weight="600" font-size="15">Идёт к тренеру</text><text y="15" fill="rgba(255,255,255,.6)" font-size="11.5">с историей обучения</text></g>
+          <g transform="translate(260 448)"><rect x="-96" y="-26" width="192" height="52" rx="26" fill="#0D2131" stroke="rgba(255,255,255,.2)"/><text y="-3" fill="#fff" font-weight="600" font-size="15">Играет и соревнуется</text><text y="15" fill="rgba(255,255,255,.6)" font-size="11.5">партнёры, клубы, турниры</text></g>
+          <g transform="translate(72 260)"><rect x="-66" y="-26" width="132" height="52" rx="26" fill="#0D2131" stroke="rgba(255,255,255,.2)"/><text y="-3" fill="#fff" font-weight="600" font-size="15">Новая цель</text><text y="15" fill="rgba(255,255,255,.6)" font-size="11.5">разбор и план</text></g>
+          <text x="260" y="250" fill="#fff" font-family="Unbounded, sans-serif" font-weight="700" font-size="26">Bandeja</text>
+          <text x="260" y="276" fill="rgba(255,255,255,.6)" font-size="13">каждый круг — новый платный шаг</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Проблема</div>
+      <h2>Попробовать падел легко. Расти в нём системно — дорого и непонятно</h2>
+      <p>Новичок за вечер влюбляется в игру, а дальше упирается в четыре стены. Как на корте, только выхода через дверь нет.</p>
+    </div>
+    <div class="prob-grid rv">
+      <div class="prob">
+        <svg class="ico" viewBox="0 0 44 44" aria-hidden="true"><rect x="4" y="12" width="36" height="22" rx="5" fill="none" stroke="var(--turf)" stroke-width="2.5"/><circle cx="22" cy="23" r="5" fill="var(--ball)"/></svg>
+        <h3>Высокий порог стоимости</h3>
+        <p>Регулярные тренировки и аренда корта делают системное развитие дорогим. Платить приходится за время, а не за прогресс.</p>
+      </div>
+      <div class="prob">
+        <svg class="ico" viewBox="0 0 44 44" aria-hidden="true"><circle cx="16" cy="18" r="7" fill="none" stroke="var(--turf)" stroke-width="2.5"/><circle cx="30" cy="18" r="7" fill="none" stroke="var(--turf)" stroke-width="2.5"/><path d="M8 36c2-6 14-6 16 0M22 36c2-6 14-6 16 0" stroke="var(--turf)" stroke-width="2.5" fill="none"/><text x="20" y="22" font-size="11" font-weight="700" fill="var(--ball)">?</text></svg>
+        <h3>Тренера не с чем сравнить</h3>
+        <p>Нет понятных критериев квалификации и подхода. Высокая цена занятия сама по себе не объясняет его ценность.</p>
+      </div>
+      <div class="prob">
+        <svg class="ico" viewBox="0 0 44 44" aria-hidden="true"><path d="M6 34l8-10 6 6 8-12 10 14" fill="none" stroke="var(--turf)" stroke-width="2.5" stroke-dasharray="3 4" stroke-linecap="round"/><circle cx="38" cy="34" r="4" fill="var(--ball)"/></svg>
+        <h3>Нет программы и обратной связи</h3>
+        <p>Разовые тренировки, советы знакомых и ролики не складываются в план: что учить сейчас, какие ошибки исправлять, как мерить прогресс.</p>
+      </div>
+      <div class="prob">
+        <svg class="ico" viewBox="0 0 44 44" aria-hidden="true"><rect x="5" y="9" width="34" height="26" rx="3" fill="none" stroke="var(--turf)" stroke-width="2.5"/><path d="M22 9v26" stroke="var(--turf)" stroke-width="2.5"/><text x="9" y="27" font-size="11" font-family="monospace" font-weight="700" fill="var(--ink)">15</text><text x="25" y="27" font-size="11" font-family="monospace" font-weight="700" fill="var(--ink)">30?</text></svg>
+        <h3>Хаос на корте</h3>
+        <p>Путаница в счёте, споры о правилах, сложно найти партнёров своего уровня и понять, когда ты готов к первому турниру.</p>
+      </div>
+    </div>
+    <div class="quote-line rv">
+      <span><b>61%</b> россиян готовы сыграть в падел, если рядом будет инфраструктура</span>
+      <span><b>26%</b> уже слышали об игре</span>
+      <span class="mono" style="font-size:12px">ВЦИОМ, по данным «Ведомостей», 2025</span>
+    </div>
+  </div>
+</section>
+
+<!-- PATH -->
+<section id="path" style="background:var(--surface);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Путь игрока</div>
+      <h2>Четыре этапа с понятным результатом на каждом</h2>
+      <p>У каждого этапа есть входной уровень, навыки и практическая цель. Первый шаг бесплатный, дальше стоимость зависит от глубины программы и объёма обратной связи.</p>
+    </div>
+    <div class="track" aria-hidden="true"><div class="line"></div><div class="ballmark" id="pathBall" style="left:12.5%"></div></div>
+    <div class="stages" id="stages">
+      <button class="stage on" data-i="0" type="button">
+        <span class="n">ЭТАП 1</span>
+        <h3>Первое знакомство</h3>
+        <p>Правила с демонстрациями, счёт, базовые удары и позиции.</p>
+        <span class="res">Понимание игры и готовность к первым занятиям</span>
+        <span class="pill free">Бесплатно</span>
+      </button>
+      <button class="stage" data-i="1" type="button">
+        <span class="n">ЭТАП 2</span>
+        <h3>Базовая игра</h3>
+        <p>Техника, перемещения, работа в паре и типичные ошибки.</p>
+        <span class="res">План самостоятельной практики</span>
+        <span class="pill">Платная программа</span>
+      </button>
+      <button class="stage" data-i="2" type="button">
+        <span class="n">ЭТАП 3</span>
+        <h3>Продвинутый уровень</h3>
+        <p>Тактика, игровые решения и развитие выбранного стиля.</p>
+        <span class="res">Индивидуальные задачи и работа над слабостями</span>
+        <span class="pill">Платная программа</span>
+      </button>
+      <button class="stage" data-i="3" type="button">
+        <span class="n">ЭТАП 4</span>
+        <h3>Подготовка к турниру</h3>
+        <p>Форматы соревнований, подготовка и разбор матчей.</p>
+        <span class="res">План участия в первом или следующем турнире</span>
+        <span class="pill mod">Отдельный модуль</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section id="product">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Продукт</div>
+      <h2>Приложение, которое нужно и на уроке, и на корте, и после игры</h2>
+      <p>Обучение даёт причину купить. Инструменты для корта дают причину открывать приложение каждую неделю, между уроками.</p>
+    </div>
+
+    <!-- rules AI -->
+    <div class="feat">
+      <div class="copy rv">
+        <div class="eyebrow">На корте · ИИ-помощник по правилам</div>
+        <h3>Спорный розыгрыш решается за минуту, а не за полчаса спора</h3>
+        <p>Игрок описывает ситуацию своими словами. Помощник уточняет детали и объясняет решение со ссылкой на актуальную редакцию официальных правил.</p>
+        <ul>
+          <li>Если факты неизвестны или описаны по-разному, показывает варианты и называет недостающую деталь</li>
+          <li>База правил обновляется, ответы проверяет тренерская команда</li>
+          <li>На турнире решение остаётся за судьёй, помощник это прямо говорит</li>
+        </ul>
+      </div>
+      <div class="demo rv"><span class="demo-label">Демо</span><div class="chat" id="chat" aria-live="polite"></div></div>
+    </div>
+
+    <!-- scoreboard -->
+    <div class="feat flip">
+      <div class="copy rv">
+        <div class="eyebrow">На корте · счёт</div>
+        <h3>Счёт ведёт приложение. Игрокам остаётся играть</h3>
+        <p>Очко добавляется кнопкой на футболке или жестом на часах. Счёт виден на телефоне, часах или экране у корта, а история нажатий помогает восстановить его при споре.</p>
+        <ul>
+          <li>Отдельная кнопка у каждой команды, отмена и защита от двойных нажатий</li>
+          <li>Форматы: классическое «больше-меньше» и золотое очко</li>
+          <li>Ввод проверяем в реальной игре, когда в руке ракетка</li>
+        </ul>
+        <p style="font-size:14.5px">Попробуйте: нажимайте кнопки команд справа.</p>
+      </div>
+      <div class="demo rv"><span class="demo-label">Работает</span>
+        <div class="board" aria-live="polite">
+          <div class="board-row head"><span>КОМАНДА</span><span class="c" style="font-size:10.5px">С1</span><span class="c" style="font-size:10.5px">С2</span><span class="c" style="font-size:10.5px">С3</span><span style="text-align:center">ОЧКИ</span></div>
+          <div class="board-row" id="rowA"><span class="tn"><em></em>Синие</span><span class="c" data-s="0">0</span><span class="c" data-s="1">–</span><span class="c" data-s="2">–</span><span class="pt" id="ptA">0</span></div>
+          <div class="board-row" id="rowB"><span class="tn"><em></em>Жёлтые</span><span class="c" data-s="0">0</span><span class="c" data-s="1">–</span><span class="c" data-s="2">–</span><span class="pt" id="ptB">0</span></div>
+          <div class="board-status" id="bStatus">Сет 1 · гейм 1</div>
+        </div>
+        <div class="controls">
+          <button type="button" id="addA"><span class="dot"></span>Очко синим</button>
+          <button type="button" id="addB"><span class="dot"></span>Очко жёлтым</button>
+        </div>
+        <div class="ctl-row">
+          <button type="button" id="undo">↶ Отменить</button>
+          <button type="button" id="golden" aria-pressed="false">Золотое очко</button>
+          <button type="button" id="reset">Новый матч</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- avatar -->
+    <div class="feat">
+      <div class="copy rv">
+        <div class="eyebrow">Обучение · цифровой аватар тренера</div>
+        <h3>Методика тренера доступна в любое время, а не только по записи</h3>
+        <p>С согласия тренера создаём его цифрового аватара. Он объясняет материал, помогает выбрать следующий урок и отвечает в рамках проверенной методики.</p>
+        <ul>
+          <li>Игрок всегда видит, где ИИ, а где личная обратная связь тренера</li>
+          <li>Ответы опираются на материалы курса и базу знаний</li>
+          <li>Если информации не хватает, вопрос уходит живому тренеру</li>
+        </ul>
+      </div>
+      <div class="demo avatar rv"><span class="demo-label">Пример</span>
+        <div class="av-head"><div class="av-pic" aria-hidden="true"></div><div><b>Аватар тренера</b><span>Курс «Базовая игра» · урок 6 из 14</span></div></div>
+        <div class="msg u" style="animation:none">Почему после бандехи я не успеваю вернуться к сетке?</div>
+        <div class="msg a" style="animation:none">Бандеха нужна, чтобы удержать позицию у сетки. В уроке 6 разбираем: бить чуть раньше, в шаге вперёд, и сразу закрывать центр. Упражнение «бандеха + два шага» добавил в план на неделю.<span class="src">Источник: урок 6, фрагмент 02:14</span></div>
+        <div class="handoff"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="none" stroke="var(--turf)" stroke-width="2"/><path d="M7 11h8M12 8l3 3-3 3" stroke="var(--turf)" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span>Вопрос про боль в локте передан тренеру. Ответ придёт лично от него.</span></div>
+      </div>
+    </div>
+
+    <!-- video -->
+    <div class="feat flip">
+      <div class="copy rv">
+        <div class="eyebrow">После игры · видеоразбор</div>
+        <h3>Каждая ошибка с таймкодом, объяснением и упражнением</h3>
+        <p>Игрок загружает запись тренировки. Приложение отмечает удачные действия и моменты для работы: подготовку к удару, положение на корте, повторяющиеся ошибки.</p>
+        <ul>
+          <li>Пара приоритетных задач попадает в персональный план</li>
+          <li>Новые записи показывают, что изменилось со временем</li>
+          <li>Где ракурс не позволяет сделать уверенный вывод, приложение так и пишет</li>
+        </ul>
+      </div>
+      <div class="demo rv"><span class="demo-label">Пример</span>
+        <div class="video"><canvas id="vid"></canvas>
+          <div class="vmark" style="left:56%;top:30%;width:15%;height:44%"></div>
+          <div class="vtip" style="left:4%;top:7%">00:42 · поздняя подготовка ракетки к удару у стекла</div>
+        </div>
+        <div class="timeline" aria-hidden="true"><div class="bar"></div><div class="prog"></div>
+          <span class="m g" style="left:14%"></span><span class="m w" style="left:31%"></span><span class="m g" style="left:52%"></span><span class="m w" style="left:70%"></span><span class="m w" style="left:88%"></span></div>
+        <div class="vnotes">
+          <div class="vnote"><span class="t">00:42</span><span><b>Поздняя подготовка.</b> Ракетка уходит назад уже после отскока от стекла. Упражнение: «замах до отскока», 3 × 10.</span></div>
+          <div class="vnote"><span class="t">01:15</span><span><b>Хорошо.</b> Своевременный выход к сетке после лоба соперника.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- profile -->
+    <div class="feat">
+      <div class="copy rv">
+        <div class="eyebrow">Прогресс · какой ты игрок</div>
+        <h3>Профиль связывает желаемый стиль игры с конкретными навыками</h3>
+        <p>Игрок выбирает цель: увереннее защищаться, чаще атаковать у сетки, подготовиться к турниру. Платформа строит программу и уточняет её по упражнениям, играм и оценкам тренеров.</p>
+        <ul>
+          <li>Учебные баллы и игровой уровень считаются отдельно</li>
+          <li>У каждой оценки виден источник и дата обновления</li>
+          <li>Сертификат этапа с явными критериями проверки</li>
+        </ul>
+      </div>
+      <div class="demo rv"><span class="demo-label">Пример</span>
+        <div class="radar-wrap">
+          <svg class="radar" id="radar" viewBox="0 0 380 320" role="img" aria-label="Пример профиля навыков: текущий уровень и цель"></svg>
+          <div class="legend">
+            <div><i style="background:var(--turf)"></i>Сейчас</div>
+            <div><i style="background:repeating-linear-gradient(90deg,var(--ball) 0 5px,transparent 5px 8px)"></i>Цель: атакующий стиль</div>
+            <div class="chips"><span class="chip done">Курс «Основы»</span><span class="chip done">Оценка тренера</span><span class="chip">Игра у сетки</span><span class="chip">Первый турнир</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- partners -->
+    <div class="feat flip">
+      <div class="copy rv">
+        <div class="eyebrow">Сообщество · партнёры и турниры</div>
+        <h3>Игры своего уровня и понятный путь к первому турниру</h3>
+        <p>Платформа подбирает партнёров по уровню, цели встречи, месту и времени. Гайд по первому турниру снимает страх: формат, регламент, подготовка, день выступления.</p>
+        <ul>
+          <li>Клубы и организаторы размещают турниры для сообщества</li>
+          <li>Отдельный формат: турнир для новичков с учебным маршрутом</li>
+          <li>После матча игрок возвращается к обучению с новыми задачами</li>
+        </ul>
+      </div>
+      <div class="demo rv"><span class="demo-label">Пример</span>
+        <div class="matches">
+          <div class="match"><div class="when">СБ<b>19:00</b></div><div class="what"><b>Ищем пару на тренировку защиты</b><span>2 игрока · уровень 2.5–3.0 · 1,8 км</span></div><span class="lvl fit">Подходит</span></div>
+          <div class="match"><div class="when">ВС<b>11:30</b></div><div class="what"><b>Американо для новичков</b><span>8 игроков · клуб-партнёр</span></div><span class="lvl fit">Подходит</span></div>
+          <div class="match"><div class="when">14<b>НОЯ</b></div><div class="what"><b>Турнир для новичков</b><span>Готовность по маршруту: 4 из 6 шагов</span></div><span class="lvl">Подать заявку</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIDES -->
+<section style="background:var(--surface);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Маркетплейс</div>
+      <h2>Три стороны рынка, и каждая получает свою выгоду</h2>
+      <p>Тренеры проходят отбор по понятным критериям. Рейтинг строится только на подтверждённых занятиях и покупках, с модерацией и правом ответа.</p>
+    </div>
+    <div class="sides">
+      <div class="side rv">
+        <div class="who"><svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="var(--ball)"/><path d="M8 14c6 3 18 3 24 0M8 26c6-3 18-3 24 0" stroke="rgba(0,0,0,.25)" stroke-width="2" fill="none"/></svg><div><div class="gets">получает</div><h3>Игрок</h3></div></div>
+        <ul><li>Доступ к знаниям без оплаты каждого часа тренера</li><li>Программу с понятным следующим шагом</li><li>Помощь в выборе тренера по цели, стилю, цене и месту</li><li>Счёт, правила и разбор видео между уроками</li></ul>
+      </div>
+      <div class="side rv">
+        <div class="who"><svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="17" cy="15" rx="11" ry="13" fill="none" stroke="var(--turf)" stroke-width="3"/><path d="M23 25l10 10" stroke="var(--turf)" stroke-width="4" stroke-linecap="round"/><circle cx="14" cy="12" r="1.6" fill="var(--turf)"/><circle cx="20" cy="12" r="1.6" fill="var(--turf)"/><circle cx="17" cy="18" r="1.6" fill="var(--turf)"/></svg><div><div class="gets">получает</div><h3>Тренер</h3></div></div>
+        <ul><li>Продажу авторской методики многим ученикам</li><li>Поток подготовленных учеников на очные занятия</li><li>Учеников, которые приходят с историей обучения и задачей</li><li>Публичную репутацию на подтверждённых отзывах</li></ul>
+      </div>
+      <div class="side rv">
+        <div class="who"><svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="9" width="34" height="22" rx="2" fill="none" stroke="var(--ink)" stroke-width="2.5"/><path d="M20 9v22M9 9v22M31 9v22" stroke="var(--ink)" stroke-width="1.5"/></svg><div><div class="gets">получает</div><h3>Клуб и организатор</h3></div></div>
+        <ul><li>Канал привлечения игроков, которые бронируют корты</li><li>Участников турниров, готовых к формату</li><li>Аудиторию для совместных программ</li><li>Бронирование корта даёт клубу 68% выручки, игроки ему нужны постоянно</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MONEY -->
+<section id="money">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Монетизация</div>
+      <h2>Бесплатный вход, платный рост, комиссия с офлайна</h2>
+      <p>Обучение и очные занятия дополняют друг друга: практика рождает новый запрос на развитие, и игрок возвращается за следующим этапом.</p>
+    </div>
+    <div class="funnel rv">
+      <div class="tier t0"><span class="k">Вход</span><h3>Бесплатно</h3><p>Вводный курс и базовые материалы по правилам. Задача: привести игрока и показать ценность.</p><div class="bar"><span style="width:100%"></span></div></div>
+      <div class="tier"><span class="k">Ядро</span><h3>Платный контент</h3><p>Программы следующих уровней, подписка на персональные функции, пакеты видеоразборов, обратная связь тренера.</p><div class="bar"><span style="width:72%"></span></div></div>
+      <div class="tier"><span class="k">Маркетплейс</span><h3>Комиссия</h3><p>С продажи курсов тренеров и с очных занятий, оформленных через платформу.</p><div class="bar"><span style="width:50%"></span></div></div>
+      <div class="tier"><span class="k">Далее</span><h3>Партнёрства</h3><p>Предложения клубов и турниров для подготовленной аудитории.</p><div class="bar"><span style="width:30%"></span></div></div>
+    </div>
+    <p class="note">Полосы показывают путь игрока по воронке, а не долю выручки. Тарифы и распределение выручки с тренерами определяем после проверки спроса и затрат в пилоте.</p>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market" style="background:var(--surface);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Почему сейчас</div>
+      <h2>Корты строятся быстрее, чем появляются хорошие тренеры</h2>
+      <p>Инфраструктура в России растёт кратно. Каждый новый корт приводит новичков, которым нужна программа обучения.</p>
+    </div>
+    <div class="market rv">
+      <div class="mk"><b>6,2 млрд ₽</b><span>ожидаемый оборот рынка падела в России в 2025 году</span></div>
+      <div class="mk"><b>30–36 мес.</b><span>окупаемость клуба при средней рентабельности 35%: клубы будут открываться дальше</span></div>
+      <div class="mk"><b>225</b><span>турниров в год проводит ФПР: спрос на подготовку к соревнованиям уже есть</span></div>
+    </div>
+    <div class="growchart rv">
+      <svg viewBox="0 0 640 230" role="img" aria-label="Число падел-кортов в России: 2021 около 9, октябрь 2025 — 568, прогноз 2030 — 2135">
+        <line x1="60" y1="190" x2="620" y2="190" stroke="var(--line)"/>
+        <line x1="60" y1="140" x2="620" y2="140" stroke="var(--line)" stroke-dasharray="3 5"/>
+        <line x1="60" y1="90" x2="620" y2="90" stroke="var(--line)" stroke-dasharray="3 5"/>
+        <line x1="60" y1="40" x2="620" y2="40" stroke="var(--line)" stroke-dasharray="3 5"/>
+        <text x="50" y="194" text-anchor="end">0</text><text x="50" y="144" text-anchor="end">700</text><text x="50" y="94" text-anchor="end">1 400</text><text x="50" y="44" text-anchor="end">2 100</text>
+        <!-- scale: 0..2100 -> 190..40 ; x: 2021=90, 2025=330, 2030=600 -->
+        <path d="M90 189.4 L330 149.4" stroke="var(--turf)" stroke-width="3" fill="none"/>
+        <path d="M330 149.4 L600 37.5" stroke="var(--turf)" stroke-width="3" fill="none" stroke-dasharray="6 6"/>
+        <path d="M90 189.4 L330 149.4 L330 190 L90 190Z" fill="var(--turf)" opacity=".14"/>
+        <circle cx="90" cy="189.4" r="5" fill="var(--turf)"/>
+        <circle cx="330" cy="149.4" r="7" fill="var(--ball)" stroke="var(--surface)" stroke-width="2"/>
+        <circle cx="600" cy="37.5" r="5" fill="var(--surface)" stroke="var(--turf)" stroke-width="2.5"/>
+        <text x="90" y="212" text-anchor="middle">2021</text><text x="330" y="212" text-anchor="middle">окт. 2025</text><text x="600" y="212" text-anchor="middle">2030 (прогноз)</text>
+        <text x="96" y="176" fill="var(--ink)">≈9</text>
+        <text x="330" y="133" text-anchor="middle" fill="var(--ink)" font-weight="600" style="font-size:13px">568 кортов</text>
+        <text x="592" y="26" text-anchor="end" fill="var(--ink)" font-weight="600" style="font-size:13px">2 135</text>
+      </svg>
+    </div>
+    <p class="note">Падел-корты в России. 2021 год рассчитан из роста «в 60 раз» к 568. Источник: «Ведомости. Спорт», декабрь 2025.</p>
+  </div>
+</section>
+
+<!-- LAUNCH -->
+<section id="launch">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">План запуска</div>
+      <h2>Сначала проверяем, что люди учатся и платят. Потом масштабируем</h2>
+      <p>Тяжёлые ИИ-функции развиваем только после проверки качества. Первая версия держится на одном сильном тренере и простом пути до очного занятия.</p>
+    </div>
+    <div class="road">
+      <div class="phase now rv"><span class="k">ФАЗА 1 · ПИЛОТ</span><h3>Первая версия</h3>
+        <ul><li>Один сильный тренер-соавтор методики</li><li>Бесплатный вводный этап и один платный курс</li><li>Профиль прогресса и материалы по правилам</li><li>Запись на очное занятие</li><li>Параллельно: прототип счёта с кнопками на реальных играх</li></ul></div>
+      <div class="phase rv"><span class="k">ФАЗА 2 · МАРКЕТПЛЕЙС</span><h3>Сеть тренеров</h3>
+        <ul><li>Новые тренеры и их курсы</li><li>Отбор, сертификация и рейтинги</li><li>Турниры от партнёров</li><li>Подбор партнёров по уровню</li></ul></div>
+      <div class="phase rv"><span class="k">ФАЗА 3 · ИИ</span><h3>Персональный тренер в кармане</h3>
+        <ul><li>Полноценный цифровой аватар тренера</li><li>Автоматический видеоанализ</li><li>Только после проверки качества ответов и рекомендаций на экспертных разборах</li></ul></div>
+    </div>
+    <div class="metrics rv">
+      <div><div class="eyebrow">Метрики пилота</div><h3 style="margin-top:10px">Что докажет, что модель работает</h3></div>
+      <div class="mgrid">
+        <div><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--ball)"/><path d="M7 12l3 3 7-7" stroke="var(--ball-ink)" stroke-width="2.2" fill="none"/></svg><span>Доля игроков, завершивших вводный курс</span></div>
+        <div><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--ball)"/><path d="M7 12l3 3 7-7" stroke="var(--ball-ink)" stroke-width="2.2" fill="none"/></svg><span>Конверсия в оплату следующего этапа</span></div>
+        <div><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--ball)"/><path d="M7 12l3 3 7-7" stroke="var(--ball-ink)" stroke-width="2.2" fill="none"/></svg><span>Повторное использование приложения: счёт, правила, разборы</span></div>
+        <div><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--ball)"/><path d="M7 12l3 3 7-7" stroke="var(--ball-ink)" stroke-width="2.2" fill="none"/></svg><span>Запись к тренеру после онлайн-обучения</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final">
+  <div class="wrap">
+    <div class="eyebrow">Присоединяйтесь</div>
+    <h2>Падел растёт. Мы строим то, как в него будут учиться</h2>
+    <p>Ищем партнёров, которые помогут запустить пилот и проверить модель на реальных игроках.</p>
+    <div class="asks">
+      <div class="ask"><b>Инвесторы</b><span>Финансирование первой версии и пилота</span></div>
+      <div class="ask"><b>Тренеры</b><span>Соавторы методики и первых курсов</span></div>
+      <div class="ask"><b>Клубы</b><span>Площадки для пилота, турниров и очных занятий</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">Bandeja — рабочее название. Бандеха — фирменный удар падела над головой.</span>
+    <span>Источники цифр:</span>
+    <ol>
+      <li><a href="https://www.padeladdict.com/en/padel-is-experiencing-unstoppable-growth-more-than-58000-courts-worldwide-and-19-4-million-players/" target="_blank" rel="noopener">Playtomic × Strategy&amp; (PwC), Global Padel Report 2026 — обзор Padel Addict</a></li>
+      <li><a href="https://www.vedomosti.ru/sport/others/articles/2025/12/05/1160982-kak-padel-stal-samim-bistrorastuschim-vidom-sporta-v-rossii" target="_blank" rel="noopener">«Ведомости. Спорт»: как падел стал самым быстрорастущим видом спорта в России, 05.12.2025</a></li>
+    </ol>
+  </div>
+</footer>
+
+<script>
+(()=>{
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- HERO COURT ---------- */
+const cv = document.getElementById('court'), cx = cv.getContext('2d');
+let W=0,H=0,S=1,ox=0,oy=0;
+function size(){
+  const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio||1,2);
+  cv.width = r.width*d; cv.height = r.height*d; cx.setTransform(d,0,0,d,0,0);
+  W=r.width; H=r.height; S=Math.min((W-36)/20,(H-36)/10); ox=(W-20*S)/2; oy=(H-10*S)/2;
+}
+const P=(x,y)=>[ox+x*S, oy+y*S];
+const players=[
+  {side:0,x:7,y:2.6,tx:7,ty:2.6},{side:0,x:7.5,y:7.4,tx:7.5,ty:7.4},
+  {side:1,x:13,y:2.6,tx:13,ty:2.6},{side:1,x:12.5,y:7.4,tx:12.5,ty:7.4}];
+let shot=null, t=0, trail=[], flash={w:null,a:0}, side=0, ballPos={x:7,y:2.6,h:1};
+const rnd=(a,b)=>a+Math.random()*(b-a);
+function newShot(){
+  const from = side, to = 1-side, dir = to?1:-1;
+  const hitter = players.filter(p=>p.side===from).sort((a,b)=>Math.hypot(a.x-ballPos.x,a.y-ballPos.y)-Math.hypot(b.x-ballPos.x,b.y-ballPos.y))[0];
+  const start={x:ballPos.x,y:ballPos.y};
+  const bx = to? rnd(13,18.2) : rnd(1.8,7), by = rnd(1.2,8.8);
+  const segs=[{a:start,b:{x:bx,y:by},d:rnd(.8,1.05),pk:rnd(1.4,2.4)}];
+  let end, wall=null;
+  if(Math.random()<.5){
+    const wx = to?20:0, wy=Math.min(9.5,Math.max(.5,by+rnd(-1.4,1.4)));
+    wall={x:wx,y:wy};
+    segs.push({a:segs[0].b,b:wall,d:.38,pk:.9});
+    end={x: to? rnd(15.5,17.8): rnd(2.2,4.5), y: Math.min(9,Math.max(1,wy+rnd(-1.2,1.2)))};
+    segs.push({a:wall,b:end,d:.5,pk:.7,wall:true});
+  } else {
+    end={x:Math.min(19.2,Math.max(.8,bx+dir*rnd(1,2.2))), y:Math.min(9,Math.max(1,by+rnd(-1,1)))};
+    segs.push({a:segs[0].b,b:end,d:.42,pk:.8});
+  }
+  const recv = players.filter(p=>p.side===to).sort((a,b)=>Math.abs(a.y-end.y)-Math.abs(b.y-end.y))[0];
+  recv.tx=end.x; recv.ty=end.y;
+  const mate = players.find(p=>p.side===to && p!==recv); mate.ty = end.y<5? rnd(6.5,8.2): rnd(1.8,3.5); mate.tx = to? rnd(12.5,15): rnd(5,7.5);
+  // hitter's team recovers toward net
+  players.filter(p=>p.side===from).forEach(p=>{p.tx = from? rnd(11.8,13.2): rnd(6.8,8.2);});
+  shot={segs,i:0,u:0}; side=to;
+}
+function drawCourt(){
+  const c=css('--court')||'#1E5AA0';
+  cx.fillStyle=css('--court-2'); cx.fillRect(0,0,W,H);
+  const [x0,y0]=P(0,0);
+  cx.fillStyle=c; cx.fillRect(x0,y0,20*S,10*S);
+  // turf texture stripes
+  cx.globalAlpha=.06; cx.fillStyle='#fff';
+  for(let i=0;i<20;i+=2){const [a]=P(i,0); cx.fillRect(a,y0,S,10*S);}
+  cx.globalAlpha=1;
+  cx.strokeStyle='rgba(255,255,255,.92)'; cx.lineWidth=Math.max(1.5,S*.06);
+  const L=(a,b,c2,d)=>{const p=P(a,b),q=P(c2,d);cx.beginPath();cx.moveTo(p[0],p[1]);cx.lineTo(q[0],q[1]);cx.stroke();};
+  L(3.05,0,3.05,10); L(16.95,0,16.95,10); L(3.05,5,16.95,5);
+  // net
+  cx.save(); cx.strokeStyle='rgba(255,255,255,.95)'; cx.lineWidth=Math.max(2.5,S*.12); L(10,-.15,10,10.15); cx.restore();
+  cx.save(); cx.setLineDash([2,3]); cx.strokeStyle='rgba(255,255,255,.35)'; cx.lineWidth=S*.35; L(10,0,10,10); cx.restore();
+  // walls: glass back walls + 4m glass on sides, mesh in middle
+  const glass=(a,b,c2,d,key)=>{cx.save(); let al=.55; if(flash.w===key) al=.55+flash.a*.45;
+    cx.strokeStyle=`rgba(210,236,255,${al})`; cx.lineWidth=Math.max(4,S*.22); if(flash.w===key){cx.shadowColor='#F1C823';cx.shadowBlur=18*flash.a;} L(a,b,c2,d); cx.restore();};
+  glass(0,0,0,10,'L'); glass(20,0,20,10,'R');
+  glass(0,0,4,0); glass(16,0,20,0); glass(0,10,4,10); glass(16,10,20,10);
+  cx.save(); cx.setLineDash([3,4]); cx.strokeStyle='rgba(255,255,255,.4)'; cx.lineWidth=Math.max(2,S*.1); L(4,0,16,0); L(4,10,16,10); cx.restore();
+}
+function drawPlayers(){
+  players.forEach(p=>{
+    const [x,y]=P(p.x,p.y), r=Math.max(7,S*.42);
+    cx.fillStyle='rgba(0,0,0,.25)'; cx.beginPath(); cx.ellipse(x+3,y+4,r,r*.8,0,0,7); cx.fill();
+    cx.fillStyle = p.side? '#0B1B28':'#FFFFFF'; cx.beginPath(); cx.arc(x,y,r,0,7); cx.fill();
+    cx.strokeStyle = p.side? '#F1C823':'#1D5BA3'; cx.lineWidth=3; cx.stroke();
+  });
+}
+function drawBall(){
+  // trail
+  for(let i=0;i<trail.length;i++){
+    const q=trail[i], [x,y]=P(q.x,q.y); const a=i/trail.length;
+    cx.fillStyle=`rgba(241,200,35,${a*.35})`; cx.beginPath(); cx.arc(x,y-q.h*S*.55,Math.max(1.5,S*.12*a+1),0,7); cx.fill();
+  }
+  const [x,y]=P(ballPos.x,ballPos.y), lift=ballPos.h*S*.55, r=Math.max(4,S*.2)*(1+ballPos.h*.12);
+  cx.fillStyle='rgba(0,0,0,.28)'; cx.beginPath(); cx.ellipse(x,y,r*.9,r*.55,0,0,7); cx.fill();
+  cx.fillStyle='#F1C823'; cx.beginPath(); cx.arc(x,y-lift,r,0,7); cx.fill();
+  cx.strokeStyle='rgba(255,255,255,.7)'; cx.lineWidth=1.3; cx.beginPath(); cx.arc(x-r*.2,y-lift-r*.1,r*.7,-.6,1.2); cx.stroke();
+}
+let last=performance.now();
+function frame(now){
+  const dt=Math.min(.05,(now-last)/1000); last=now;
+  if(!shot) newShot();
+  const s=shot.segs[shot.i]; shot.u+=dt/s.d;
+  if(shot.u>=1){
+    if(s.b.x===0||s.b.x===20){flash={w:s.b.x?'R':'L',a:1};}
+    shot.i++; shot.u=0;
+    if(shot.i>=shot.segs.length){ballPos={...s.b,h:.9}; shot=null;}
+  }
+  if(shot){const g=shot.segs[shot.i], u=Math.min(1,shot.u);
+    ballPos={x:g.a.x+(g.b.x-g.a.x)*u, y:g.a.y+(g.b.y-g.a.y)*u, h:4*g.pk*u*(1-u)+(shot.i===0?(1-u)*.9:0)};}
+  flash.a=Math.max(0,flash.a-dt*2.2);
+  players.forEach(p=>{p.x+=(p.tx-p.x)*Math.min(1,dt*2.6); p.y+=(p.ty-p.y)*Math.min(1,dt*2.6);});
+  trail.push({...ballPos}); if(trail.length>22) trail.shift();
+  drawCourt(); drawPlayers(); drawBall();
+  if(!RM) requestAnimationFrame(frame);
+}
+size(); new ResizeObserver(()=>{size(); if(RM){drawCourt();drawPlayers();drawBall();}}).observe(cv);
+if(RM){drawCourt();drawPlayers();drawBall();} else requestAnimationFrame(frame);
+
+/* ---------- STAT COUNTERS ---------- */
+const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return; io.unobserve(e.target); if(RM) return;
+  const el=e.target, end=+el.dataset.count, pre=el.dataset.prefix||''; const t0=performance.now();
+  const step=n=>{const k=Math.min(1,(n-t0)/1400), v=end*(1-Math.pow(1-k,3)); el.textContent=pre+fmt(v); if(k<1) requestAnimationFrame(step); else el.textContent=pre+fmt(end);};
+  requestAnimationFrame(step);
+}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+
+/* ---------- PATH STAGES ---------- */
+const stages=[...document.querySelectorAll('.stage')], pb=document.getElementById('pathBall');
+let cur=0, auto=true, timer;
+function sel(i){cur=i; stages.forEach((s,j)=>s.classList.toggle('on',j===i)); pb.style.left=(12.5+25*i)+'%';}
+stages.forEach((s,i)=>s.addEventListener('click',()=>{auto=false; clearInterval(timer); sel(i);}));
+if(!RM){ const pio=new IntersectionObserver(es=>es.forEach(e=>{ clearInterval(timer); if(e.isIntersecting&&auto) timer=setInterval(()=>sel((cur+1)%4),2600);}),{threshold:.3}); pio.observe(document.getElementById('stages')); }
+
+/* ---------- RULES CHAT ---------- */
+const chat=document.getElementById('chat');
+const script=[
+  {u:'Соперник пробил, мяч попал прямо в сетку на нашей стороне, не коснувшись пола. Мы не стали отбивать. Чьё очко?'},
+  {a:'<span class="verdict">Очко ваше</span><br>После удара соперника мяч должен сначала отскочить от пола на вашей половине. Если он до отскока попал в стекло или металлическую сетку, это ошибка ударившего.',src:'Официальные правила FIP, актуальная редакция · видеопример в уроке «Стены и сетка»'},
+  {u:'А если сначала был отскок от пола, а потом мяч ушёл в сетку?'},
+  {a:'Тогда мяч в игре, и вы могли его отбить. Не отбили — очко соперника. Если вы с соперниками по-разному помните, был ли отскок, решение зависит от этой детали. На турнире его принимает судья.',src:'Официальные правила FIP, актуальная редакция'}
+];
+function el(h,c){const d=document.createElement('div'); d.className=c; d.innerHTML=h; return d;}
+function render(m){return m.u? el(m.u,'msg u') : el(m.a+(m.src?`<span class="src">${m.src}</span>`:''),'msg a');}
+if(RM){script.forEach(m=>chat.appendChild(render(m)));}
+else{
+  let started=false;
+  const run=async()=>{
+    const wait=ms=>new Promise(r=>setTimeout(r,ms));
+    while(true){
+      chat.innerHTML='';
+      for(const m of script){
+        if(m.a){const ty=el('<i></i><i></i><i></i>','typing'); chat.appendChild(ty); await wait(1300); ty.remove();}
+        chat.appendChild(render(m)); await wait(m.u?900:2600);
+      }
+      await wait(4000);
+    }
+  };
+  // show first state at rest
+  script.slice(0,2).forEach(m=>chat.appendChild(render(m)));
+  new IntersectionObserver((es,o)=>{if(es[0].isIntersecting&&!started){started=true;o.disconnect();run();}},{threshold:.4}).observe(chat);
+}
+
+/* ---------- SCOREBOARD ---------- */
+const PT=['0','15','30','40'];
+let st, hist=[], golden=false;
+const fresh=()=>({p:[0,0],g:[0,0],sets:[],won:[0,0],tb:false,done:null});
+st=fresh();
+const clone=o=>JSON.parse(JSON.stringify(o));
+function label(i){
+  const o=1-i, p=st.p[i], q=st.p[o];
+  if(st.tb) return String(p);
+  if(p>=3&&q>=3){ if(p===q) return '40'; return p>q?'AD':'40'; }
+  return PT[Math.min(p,3)];
+}
+function winGame(i){
+  const o=1-i; st.g[i]++; st.p=[0,0]; st.tb=false;
+  if((st.g[i]>=6&&st.g[i]-st.g[o]>=2)||st.g[i]===7){ st.sets.push([...st.g]); st.won[i]++; st.g=[0,0];
+    if(st.won[i]===2) st.done=i; }
+  else if(st.g[0]===6&&st.g[1]===6) st.tb=true;
+}
+function add(i){
+  if(st.done!==null){st=fresh(); hist=[]; draw(); return;}
+  hist.push(clone(st)); if(hist.length>200) hist.shift();
+  const o=1-i; st.p[i]++;
+  const p=st.p[i], q=st.p[o];
+  if(st.tb){ if(p>=7&&p-q>=2) winGame(i); }
+  else if(golden&&p===4&&q===3) winGame(i);
+  else if(p>=4&&p-q>=2) winGame(i);
+  draw(i);
+}
+function draw(bump){
+  ['A','B'].forEach((k,i)=>{
+    const row=document.getElementById('row'+k);
+    const cells=row.querySelectorAll('.c'); const si=st.sets.length;
+    cells.forEach((c,j)=>{ c.classList.toggle('cur',j===si&&st.done===null);
+      c.textContent = j<si? st.sets[j][i] : (j===si&&st.done===null? st.g[i] : '–'); });
+    const pt=document.getElementById('pt'+k); pt.textContent= st.done!==null? (st.done===i?'🏆':'') : label(i);
+    if(bump===i&&!RM){pt.classList.add('bump'); setTimeout(()=>pt.classList.remove('bump'),160);}
+    const lead = st.done!==null? st.done===i : (st.p[i]>st.p[1-i]);
+    row.classList.toggle('lead',lead);
+  });
+  const s=document.getElementById('bStatus');
+  if(st.done!==null) s.textContent=`Матч выигран: ${st.done?'Жёлтые':'Синие'} · нажмите любую кнопку для нового`;
+  else if(st.tb) s.textContent=`Сет ${st.sets.length+1} · тай-брейк до 7`;
+  else { const a=st.p[0],b=st.p[1]; let x='';
+    if(a>=3&&b>=3&&a===b) x= golden?' · золотое очко: следующий розыгрыш решает гейм':' · ровно';
+    s.textContent=`Сет ${st.sets.length+1} · гейм ${st.g[0]+st.g[1]+1}${x}`; }
+}
+document.getElementById('addA').onclick=()=>add(0);
+document.getElementById('addB').onclick=()=>add(1);
+document.getElementById('undo').onclick=()=>{ if(hist.length){st=hist.pop(); draw();} };
+document.getElementById('reset').onclick=()=>{st=fresh(); hist=[]; draw();};
+document.getElementById('golden').onclick=e=>{golden=!golden; e.currentTarget.setAttribute('aria-pressed',golden); draw();};
+// sample state so the demo isn't empty
+[0,0,1,0,1,1].forEach(i=>{hist.push(clone(st)); st.p[i]++;});
+st.g=[3,2]; hist=[]; draw();
+
+/* ---------- VIDEO MOCK ---------- */
+const vc=document.getElementById('vid'), vx=vc.getContext('2d');
+function vid(tm){
+  const r=vc.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
+  if(vc.width!==Math.round(r.width*d)){vc.width=r.width*d; vc.height=r.height*d;}
+  vx.setTransform(d,0,0,d,0,0); const w=r.width,h=r.height;
+  // perspective court
+  const g=vx.createLinearGradient(0,0,0,h); g.addColorStop(0,'#0f3561'); g.addColorStop(1,'#1E5AA0');
+  vx.fillStyle=g; vx.fillRect(0,0,w,h);
+  vx.fillStyle='rgba(200,230,255,.12)'; vx.fillRect(0,0,w,h*.32);
+  vx.strokeStyle='rgba(255,255,255,.75)'; vx.lineWidth=2;
+  const ln=(a,b,c,e)=>{vx.beginPath();vx.moveTo(a*w,b*h);vx.lineTo(c*w,e*h);vx.stroke();};
+  ln(.18,.32,.02,1); ln(.82,.32,.98,1); ln(.18,.32,.82,.32); ln(.12,.55,.88,.55); ln(.5,.55,.5,1);
+  vx.strokeStyle='rgba(255,255,255,.3)'; vx.lineWidth=1; for(let i=0;i<12;i++){ln(.18+i*.0545,.0,.18+i*.0545,.32);}
+  // player figure
+  const k=RM?0:Math.sin(tm/600)*.012;
+  const px=.63*w, py=.72*h, s=h*.2;
+  vx.strokeStyle='#F4F7FA'; vx.lineWidth=Math.max(3,s*.09); vx.lineCap='round';
+  vx.beginPath(); vx.arc(px,py-s*1.55,s*.16,0,7); vx.fillStyle='#F4F7FA'; vx.fill();
+  vx.beginPath(); vx.moveTo(px,py-s*1.38); vx.lineTo(px,py-s*.7); vx.lineTo(px-s*.3,py); vx.moveTo(px,py-s*.7); vx.lineTo(px+s*.32,py); vx.stroke();
+  vx.beginPath(); vx.moveTo(px,py-s*1.25); vx.lineTo(px+s*(.45+k*8),py-s*(1.0+k*10)); vx.stroke();
+  vx.strokeStyle='#0B1B28'; vx.lineWidth=Math.max(5,s*.14); vx.beginPath(); vx.ellipse(px+s*(.6+k*8),py-s*(1.12+k*10),s*.13,s*.18,.4,0,7); vx.stroke();
+  // ball
+  const bt=RM?.5:(tm/1800)%1; vx.fillStyle='#F1C823'; vx.beginPath(); vx.arc((.25+bt*.42)*w,(.5+Math.sin(bt*Math.PI)*-.18)*h,Math.max(3,h*.022),0,7); vx.fill();
+  if(!RM) requestAnimationFrame(vid);
+}
+requestAnimationFrame(vid);
+
+/* ---------- RADAR ---------- */
+const rd=document.getElementById('radar'), axes=['Атака','Защита','Стабильность','Перемещения','Тактика','Игра в паре'];
+const now=[.5,.72,.58,.6,.42,.66], goal=[.82,.75,.7,.72,.65,.74];
+const C=[190,160], R=95, ang=i=>-Math.PI/2+i*2*Math.PI/6, pt=(i,v)=>[C[0]+Math.cos(ang(i))*R*v, C[1]+Math.sin(ang(i))*R*v];
+let svg='';
+[.25,.5,.75,1].forEach(l=>{svg+=`<polygon class="grid" points="${axes.map((_,i)=>pt(i,l).join(',')).join(' ')}"/>`});
+axes.forEach((a,i)=>{const [x,y]=pt(i,1); svg+=`<line x1="${C[0]}" y1="${C[1]}" x2="${x}" y2="${y}" stroke="var(--line)"/>`;
+  const [lx,ly]=pt(i,1.2); svg+=`<text x="${lx}" y="${ly+4}" text-anchor="${Math.abs(lx-C[0])<5?'middle':lx>C[0]?'start':'end'}">${a}</text>`;});
+svg+=`<g class="grow"><polygon class="now" points="${now.map((v,i)=>pt(i,v).join(',')).join(' ')}"/><polygon class="goal" points="${goal.map((v,i)=>pt(i,v).join(',')).join(' ')}"/></g>`;
+rd.innerHTML=svg;
+if(RM) rd.classList.add('in'); else new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){rd.classList.add('in');o.disconnect();}},{threshold:.4}).observe(rd);
+setTimeout(()=>rd.classList.add('in'),4000); // never stay collapsed
+})();
+</script>
+</body></html>
