@@ -1,0 +1,174 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Bandeja design system — общая тема лендинга и приложения.
+ * Имена переменных — стандартные для shadcn/ui: любой компонент из `npx shadcn add …`
+ * автоматически получает фирменные цвета. Фирменные токены сверх стандарта:
+ *   --brand  (синий корта)       → bg-brand / text-brand
+ *   --accent (жёлтый мяч)        → bg-accent / text-accent-foreground
+ *   --court, --court-deep, --deep → поверхности корта и тёмных секций
+ */
+:root {
+  --radius: 0.875rem;
+
+  --background: #eef2f5;
+  --foreground: #0a1f2e;
+  --card: #ffffff;
+  --card-foreground: #0a1f2e;
+  --popover: #ffffff;
+  --popover-foreground: #0a1f2e;
+  --primary: #0a1f2e;
+  --primary-foreground: #eef2f5;
+  --secondary: #e2eaf1;
+  --secondary-foreground: #0a1f2e;
+  --muted: #e2eaf1;
+  --muted-foreground: #526472;
+  --accent: #f1c823;
+  --accent-foreground: #1a1600;
+  --destructive: #c8372d;
+  --border: #cbd6df;
+  --input: #cbd6df;
+  --ring: #f1c823;
+
+  --brand: #1d5ba3;
+  --brand-foreground: #ffffff;
+  --success: #1f8a5b;
+  --court: #1e5aa0;
+  --court-deep: #174c89;
+  --deep: #0a1f2e;
+  --scoreboard: #0b1b28;
+
+  --chart-1: #1d5ba3;
+  --chart-2: #f1c823;
+  --chart-3: #1f8a5b;
+  --chart-4: #526472;
+  --chart-5: #0a1f2e;
+}
+
+.dark {
+  --background: #071521;
+  --foreground: #e8f0f6;
+  --card: #0d2131;
+  --card-foreground: #e8f0f6;
+  --popover: #0d2131;
+  --popover-foreground: #e8f0f6;
+  --primary: #e8f0f6;
+  --primary-foreground: #071521;
+  --secondary: #11293c;
+  --secondary-foreground: #e8f0f6;
+  --muted: #11293c;
+  --muted-foreground: #90a5b5;
+  --accent: #f3cf32;
+  --accent-foreground: #1a1600;
+  --destructive: #e5584d;
+  --border: #1d3a50;
+  --input: #1d3a50;
+  --ring: #f3cf32;
+
+  --brand: #5c9be6;
+  --brand-foreground: #071521;
+  --success: #4cc18b;
+  --court: #164a86;
+  --court-deep: #113c6e;
+  --deep: #0f2a42;
+  --scoreboard: #0b1b28;
+
+  --chart-1: #5c9be6;
+  --chart-2: #f3cf32;
+  --chart-3: #4cc18b;
+  --chart-4: #90a5b5;
+  --chart-5: #e8f0f6;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-display: "Unbounded", "Onest", system-ui, sans-serif;
+  --font-sans: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 10px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-success: var(--success);
+  --color-court: var(--court);
+  --color-court-deep: var(--court-deep);
+  --color-deep: var(--deep);
+  --color-scoreboard: var(--scoreboard);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.01em; }
+  h1, h2, h3, p, li { overflow-wrap: break-word; hyphens: auto; }
+  :focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+}
+
+@layer components {
+  /* Повторяющиеся элементы лендинга — в приложении используются так же */
+  .eyebrow { @apply font-mono text-[12.5px] font-semibold uppercase tracking-[0.12em] text-brand; }
+  .wrap {
+    @apply mx-auto w-full max-w-[1180px];
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .section { @apply py-16 md:py-24 lg:py-[120px]; }
+  .dot-list li { @apply grid grid-cols-[18px_minmax(0,1fr)] gap-2.5 text-[15.5px]; }
+  .dot-list li::before {
+    content: ""; @apply mt-2 size-[9px] rounded-full bg-accent;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+}
+
+/* Скролл-анимация появления: только сдвиг, контент виден всегда */
+@supports (animation-timeline: view()) {
+  .rv { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  @keyframes rise { from { transform: translateY(36px); } to { transform: none; } }
+}
+@keyframes sweep { to { background-size: 100% 0.26em; } }
+@keyframes blink { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+@keyframes pop { from { transform: translateY(8px) scale(.98); } to { transform: none; } }
+@keyframes pulse-ring { 0%, 100% { box-shadow: 0 0 0 0 rgba(241,200,35,.5); } 50% { box-shadow: 0 0 0 10px rgba(241,200,35,0); } }
+@keyframes play { to { width: 100%; } }
