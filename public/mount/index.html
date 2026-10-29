@@ -47,7 +47,7 @@ section+section{border-top:1px solid var(--line)}
 .variant .seg button{padding:10px 18px;font-size:15px}
 .variant p{font-size:14px;color:var(--muted);margin:0;max-width:44ch}
 .cmp-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
-.cmp{width:100%;border-collapse:collapse;font-size:15px;min-width:640px}
+.cmp{width:100%;border-collapse:collapse;font-size:15px;min-width:820px}
 .cmp th,.cmp td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
 .cmp tr:last-child td{border-bottom:0}
 .cmp th{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -134,7 +134,13 @@ footer a{color:inherit}
   <header class="hero">
     <div class="eyebrow">Bandeja · аксессуар для корта · концепт v0.1</div>
     <h1>Крепление табло на корт: сетка или стекло</h1>
-    <p>Три способа повесить телефон или планшет со счётом снаружи корта: цельный корпус Clip на сетку, рамка на крюках на сетку и рамка на присосках на стекло. Экран смотрит на игроков, а внутри корта ничего нет, поэтому игре крепление не мешает.</p>
+    <p>Четыре способа повесить телефон или планшет со счётом снаружи корта: две раздвижные держалки Duo и цельный корпус Clip на сетку, рамка на крюках на сетку и рамка на присосках на стекло. Экран смотрит на игроков, а внутри корта ничего нет, поэтому игре крепление не мешает.</p>
+    <div class="specs" data-variant="duo">
+      <span class="spec">держалки <b>2 одинаковые</b></span>
+      <span class="spec">устройства <b>6–13″</b></span>
+      <span class="spec">разводятся <b>на 2–6 ячеек</b></span>
+      <span class="spec">в корт выступает <b>≈ 7 мм</b></span>
+    </div>
     <div class="specs" data-variant="clip">
       <span class="spec">деталей <b>1 корпус</b></span>
       <span class="spec">ставится <b>одной рукой</b></span>
@@ -156,11 +162,12 @@ footer a{color:inherit}
     <div class="variant">
       <span class="tlabel">Вариант</span>
       <div class="seg" role="group" aria-label="Вариант крепления">
-        <button type="button" data-v="clip" aria-pressed="true">Сетка · Clip</button>
+        <button type="button" data-v="duo" aria-pressed="true">Сетка · Duo</button>
+        <button type="button" data-v="clip" aria-pressed="false">Сетка · Clip</button>
         <button type="button" data-v="mesh" aria-pressed="false">Сетка · крюки</button>
         <button type="button" data-v="glass" aria-pressed="false">Стекло</button>
       </div>
-      <p>Переключает всю страницу: модель, чертёж, установку и схему корта. Clip — рекомендуемый вариант для кортов с сеткой.</p>
+      <p>Переключает всю страницу: модель, чертёж, установку и схему корта. Duo — по вашему эскизу, Clip — цельный корпус. Оба для кортов с сеткой.</p>
     </div>
   </header>
 </div>
@@ -169,7 +176,7 @@ footer a{color:inherit}
   <div class="wrap">
     <div class="head">
       <div class="eyebrow">3D-модель</div>
-      <h2 data-variant="clip">Как Clip сидит на сетке</h2><h2 data-variant="mesh" hidden>Как крепление сидит на сетке</h2><h2 data-variant="glass" hidden>Как крепление стоит на стекле</h2>
+      <h2 data-variant="duo">Как держалки Duo сидят на сетке</h2><h2 data-variant="clip" hidden>Как Clip сидит на сетке</h2><h2 data-variant="mesh" hidden>Как крепление сидит на сетке</h2><h2 data-variant="glass" hidden>Как крепление стоит на стекле</h2>
       <p>Крутите модель мышью или пальцем. Номера на модели совпадают со списком деталей. Режим «Разнесено» показывает, из чего собрано крепление.</p>
     </div>
     <div class="viewer">
@@ -213,7 +220,8 @@ footer a{color:inherit}
     <div class="head">
       <div class="eyebrow">Чертёж · версия для телефона</div>
       <h2>Вид с корта и разрез сбоку</h2>
-      <p data-variant="clip">Размеры в миллиметрах. Вес держит один язычок, магниты только прижимают корпус к прутьям. Поэтому шаг сетки не важен и ничего не нужно подгонять.</p>
+      <p data-variant="duo">Размеры в миллиметрах. Две одинаковые держалки висят независимо, расстояние между ними задаёт, какое устройство в них встанет.</p>
+      <p data-variant="clip" hidden>Размеры в миллиметрах. Вес держит один язычок, магниты только прижимают корпус к прутьям. Поэтому шаг сетки не важен и ничего не нужно подгонять.</p>
       <p data-variant="mesh" hidden>Размеры в миллиметрах. Защёлка ездит по вертикали, поэтому одно крепление подходит под разный шаг сетки.</p>
       <p data-variant="glass" hidden>Размеры в миллиметрах. Экран прижат к стеклу вплотную через светоуплотнитель, присоски стоят по бокам на одной траверсе.</p>
     </div>
@@ -311,6 +319,93 @@ footer a{color:inherit}
         </tbody>
       </table>
         </div>
+    </div>
+    <div id="drawDuo" data-variant="duo" hidden>
+    <div class="sheet">
+      <svg viewBox="0 0 820 430" role="img" aria-label="Чертёж держалок Duo: вид с корта и разрез сбоку с размерами">
+        <defs><marker id="dD" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" fill="var(--dim)"/></marker></defs>
+        <text x="40" y="28" font-size="12" fill="var(--muted)" letter-spacing="1.2">ВИД С КОРТА · ТЕЛЕФОН</text>
+        <text x="500" y="28" font-size="12" fill="var(--muted)" letter-spacing="1.2">РАЗРЕЗ СБОКУ</text>
+        <g stroke="var(--line)" stroke-width="2">
+          <line x1="80" y1="40" x2="80" y2="400"/><line x1="155" y1="40" x2="155" y2="400"/><line x1="230" y1="40" x2="230" y2="400"/><line x1="305" y1="40" x2="305" y2="400"/><line x1="380" y1="40" x2="380" y2="400"/>
+          <line x1="50" y1="45" x2="410" y2="45"/><line x1="50" y1="120" x2="410" y2="120"/><line x1="50" y1="195" x2="410" y2="195"/><line x1="50" y1="270" x2="410" y2="270"/><line x1="50" y1="345" x2="410" y2="345"/>
+        </g>
+        <g fill="var(--steel)">
+          <rect x="102.5" y="108" width="30" height="50" rx="3"/><rect x="327.5" y="108" width="30" height="50" rx="3"/>
+        </g>
+        <rect x="107.75" y="157" width="244.5" height="115.5" rx="12" fill="#0B1B28" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="185" y="216" font-size="30" font-weight="600" fill="#FFFFFF" text-anchor="middle">40</text>
+        <text x="275" y="216" font-size="30" font-weight="600" fill="#FFFFFF" text-anchor="middle">30</text>
+        <text x="230" y="244" font-size="11" fill="#F1C823" text-anchor="middle">ГЕЙМЫ 3 : 2</text>
+        <g fill="none" stroke="var(--steel)" stroke-width="1.5" stroke-dasharray="4 3">
+          <rect x="102.5" y="158" width="30" height="104"/><rect x="327.5" y="158" width="30" height="104"/>
+        </g>
+        <g fill="var(--steel)" stroke="var(--ink)" stroke-width="1">
+          <rect x="102.5" y="262" width="30" height="24" rx="3"/><rect x="327.5" y="262" width="30" height="24" rx="3"/>
+        </g>
+        <g font-size="12"><circle cx="90" cy="112" r="9" fill="var(--ball)"/><text x="90" y="116" text-anchor="middle" fill="#1A1600" font-weight="600">2</text>
+          <circle cx="90" cy="210" r="9" fill="var(--ball)"/><text x="90" y="214" text-anchor="middle" fill="#1A1600" font-weight="600">1</text>
+          <circle cx="370" cy="290" r="9" fill="var(--ball)"/><text x="370" y="294" text-anchor="middle" fill="#1A1600" font-weight="600">3</text></g>
+        <g stroke="var(--dim)" stroke-width="1" fill="none">
+          <line x1="117.5" y1="292" x2="117.5" y2="392"/><line x1="342.5" y1="292" x2="342.5" y2="392"/>
+          <line x1="117.5" y1="384" x2="342.5" y2="384" marker-start="url(#dD)" marker-end="url(#dD)"/>
+          <line x1="102.5" y1="104" x2="102.5" y2="72"/><line x1="132.5" y1="104" x2="132.5" y2="72"/>
+          <line x1="78" y1="78" x2="102.5" y2="78" marker-end="url(#dD)"/><line x1="157" y1="78" x2="132.5" y2="78" marker-end="url(#dD)"/>
+          <line x1="362" y1="262" x2="400" y2="262"/><line x1="362" y1="286" x2="400" y2="286"/>
+          <line x1="394" y1="262" x2="394" y2="286" marker-start="url(#dD)" marker-end="url(#dD)"/>
+        </g>
+        <g fill="var(--dim)" font-size="13" font-weight="600">
+          <text x="230" y="378" text-anchor="middle">150 (разводятся на 120–300)</text>
+          <text x="162" y="74">20</text>
+          <text x="404" y="279">15</text>
+        </g>
+
+        <g stroke="var(--line)" stroke-width="2"><line x1="643" y1="40" x2="643" y2="400"/></g>
+        <g fill="var(--steel)"><circle cx="638" cy="45" r="4"/><circle cx="638" cy="120" r="4"/><circle cx="638" cy="195" r="4"/><circle cx="638" cy="270" r="4"/><circle cx="638" cy="345" r="4"/></g>
+        <text x="560" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">КОРТ</text>
+        <text x="740" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">СНАРУЖИ</text>
+        <rect x="649" y="157" width="14" height="115.5" rx="3" fill="#0B1B28"/>
+        <rect x="648" y="164" width="3" height="101" fill="#F1C823"/>
+        <path d="M632 128 V112 H666 V289 H646.5 V263" fill="none" stroke="var(--steel)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="#15191d"><rect x="649" y="281" width="14" height="4" rx="1"/><rect x="663" y="200" width="3" height="40"/></g>
+        <g font-size="12"><circle cx="684" cy="112" r="9" fill="var(--ball)"/><text x="684" y="116" text-anchor="middle" fill="#1A1600" font-weight="600">2</text>
+          <circle cx="684" cy="210" r="9" fill="var(--ball)"/><text x="684" y="214" text-anchor="middle" fill="#1A1600" font-weight="600">1</text>
+          <circle cx="626" cy="276" r="9" fill="var(--ball)"/><text x="626" y="280" text-anchor="middle" fill="#1A1600" font-weight="600">3</text>
+          <circle cx="684" cy="290" r="9" fill="var(--ball)"/><text x="684" y="294" text-anchor="middle" fill="#1A1600" font-weight="600">4</text>
+          <circle cx="626" cy="180" r="9" fill="var(--ball)"/><text x="626" y="184" text-anchor="middle" fill="#1A1600" font-weight="600">5</text></g>
+        <g stroke="var(--dim)" stroke-width="1" fill="none">
+          <line x1="646.5" y1="296" x2="646.5" y2="352"/><line x1="666" y1="296" x2="666" y2="352"/>
+          <line x1="646.5" y1="346" x2="666" y2="346" marker-start="url(#dD)" marker-end="url(#dD)"/>
+          <line x1="632" y1="104" x2="632" y2="80"/><line x1="643" y1="104" x2="643" y2="80"/>
+          <line x1="612" y1="86" x2="632" y2="86" marker-end="url(#dD)"/><line x1="663" y1="86" x2="643" y2="86" marker-end="url(#dD)"/>
+        </g>
+        <g fill="var(--dim)" font-size="13" font-weight="600">
+          <text x="656" y="370" text-anchor="middle">≤ 14</text>
+          <text x="606" y="90" text-anchor="end">≈ 7 в корт</text>
+        </g>
+        <text x="704" y="196" font-size="11.5" fill="var(--muted)">стойка позади</text>
+        <text x="704" y="211" font-size="11.5" fill="var(--muted)">устройства, экран</text>
+        <text x="704" y="226" font-size="11.5" fill="var(--muted)">не закрывает</text>
+      </svg>
+    </div>
+    <div class="sheet-foot">
+      <span><b>Масштаб</b> 1 : 0,67 (1 мм = 1,5 px)</span>
+      <span><b>Пунктир</b> — стойки за устройством, с корта видны только крюки сверху и губы снизу</span>
+      <span><b>Ширина ложа</b> до 14 мм: телефон в тонком чехле или планшет</span>
+    </div>
+    <div class="dims-wrap">
+      <table class="dims">
+        <thead><tr><th>Параметр</th><th>Телефон 6,7″</th><th>Планшет 11″</th></tr></thead>
+        <tbody>
+          <tr><td>Держалки</td><td>2 одинаковые</td><td>2 одинаковые</td></tr>
+          <tr><td>Полоса, мм</td><td>20 × 2, нержавейка или алюминий</td><td>20 × 2,5, нержавейка</td></tr>
+          <tr><td>Расстояние между держалками, мм</td><td>≈ 150 (3 ячейки)</td><td>≈ 250 (5 ячеек)</td></tr>
+          <tr><td>Высота губы спереди, мм</td><td>15</td><td>20</td></tr>
+          <tr><td>Выступ крюка в корт, мм</td><td>≈ 7</td><td>≈ 7</td></tr>
+          <tr><td>Масса пары держалок, г</td><td>≈ 90</td><td>≈ 140</td></tr>
+        </tbody>
+      </table>
+    </div>
     </div>
     <div id="drawClip" data-variant="clip" hidden>
     <div class="sheet">
@@ -493,7 +588,7 @@ footer a{color:inherit}
   <div class="wrap">
     <div class="head">
       <div class="eyebrow">Установка</div>
-      <h2 data-variant="clip">Одной рукой за 3 секунды</h2><h2 data-variant="mesh" hidden>Повесить за 10 секунд, без инструментов</h2><h2 data-variant="glass" hidden>Поставить за полминуты, без инструментов</h2>
+      <h2 data-variant="duo">Две держалки, одно устройство, 15 секунд</h2><h2 data-variant="clip" hidden>Одной рукой за 3 секунды</h2><h2 data-variant="mesh" hidden>Повесить за 10 секунд, без инструментов</h2><h2 data-variant="glass" hidden>Поставить за полминуты, без инструментов</h2>
     </div>
     <ol class="steps" id="steps"></ol>
   </div>
@@ -540,21 +635,21 @@ footer a{color:inherit}
   <div class="wrap">
     <div class="head">
       <div class="eyebrow">Сравнение</div>
-      <h2>Три варианта крепления</h2>
-      <p>Для кортов с сеткой лучше Clip: меньше деталей, быстрее ставится, лучше выглядит. Вариант на крюках остаётся запасным, если магниты не пройдут тест на удар. Стекло нужно для панорамных кортов.</p>
+      <h2>Четыре варианта крепления</h2>
+      <p>Для кортов с сеткой два главных кандидата. Duo — самый простой и дешёвый, подходит под любое устройство. Clip — самый аккуратный, но это отдельная деталь под каждый размер. Вариант на крюках остаётся запасным, стекло нужно для панорамных кортов.</p>
     </div>
     <div class="cmp-wrap">
       <table class="cmp">
-        <thead><tr><th></th><th>Сетка · Clip</th><th>Сетка · крюки</th><th>Стекло</th></tr></thead>
+        <thead><tr><th></th><th>Сетка · Duo</th><th>Сетка · Clip</th><th>Сетка · крюки</th><th>Стекло</th></tr></thead>
         <tbody>
-          <tr><td>Где работает</td><td>Корты с сеткой на боковых стенах</td><td>Корты с сеткой на боковых стенах</td><td class="plus">Любой корт, в том числе панорамный без сетки</td></tr>
-          <tr><td>Деталей</td><td class="plus">1 корпус со встроенными язычком и магнитами</td><td>Рамка, 2 крюка, защёлка, 4 демпфера, тросик</td><td>Рамка, 2 присоски, траверса, уплотнитель, тросик</td></tr>
-          <tr><td>Установка</td><td class="plus">3 секунды одной рукой: завёл язычок, опустил, щёлкнуло</td><td>10 секунд: повесил, защёлкнул, пристегнул</td><td>30 секунд: протереть, подкачать, проверить индикатор</td></tr>
-          <tr><td>Видимость</td><td>Проволока частично перекрывает цифры</td><td>Проволока частично перекрывает цифры</td><td class="plus">Ничего не перекрывает, но нужен светоуплотнитель от бликов</td></tr>
-          <tr><td>Удары мяча</td><td>Вес на язычке не зависит от магнитов. Магниты надо проверить на отрыв при ударе</td><td class="plus">Жёсткая механика, проверено временем на заборах</td><td class="minus">Стекло пружинит, дешёвые присоски отходят</td></tr>
-          <tr><td>Подгонка под корт</td><td class="plus">Не нужна: любой шаг и любая высота</td><td>Защёлка двигается под шаг 30–60 мм</td><td>Нужно чистое ровное место на стекле</td></tr>
-          <tr><td>Внешний вид</td><td class="plus">Цельный предмет, как чехол с экраном</td><td>Технический кронштейн</td><td>Технический, видны помпы</td></tr>
-          <tr><td>Главный риск</td><td>Сила магнитов на тонкой круглой проволоке, проверяется только тестом</td><td>Царапает покраску сетки без ПВХ</td><td>Вакуум слабеет на холоде и в пыли</td></tr>
+          <tr><td>Где работает</td><td>Корты с сеткой</td><td>Корты с сеткой на боковых стенах</td><td>Корты с сеткой на боковых стенах</td><td class="plus">Любой корт, в том числе панорамный без сетки</td></tr>
+          <tr><td>Деталей</td><td class="plus">2 одинаковые гнутые держалки</td><td class="plus">1 корпус со встроенными язычком и магнитами</td><td>Рамка, 2 крюка, защёлка, 4 демпфера, тросик</td><td>Рамка, 2 присоски, траверса, уплотнитель, тросик</td></tr>
+          <tr><td>Установка</td><td>15 секунд: две держалки, затем устройство</td><td class="plus">3 секунды одной рукой: завёл язычок, опустил, щёлкнуло</td><td>10 секунд: повесил, защёлкнул, пристегнул</td><td>30 секунд: протереть, подкачать, проверить индикатор</td></tr>
+          <tr><td>Видимость</td><td>Проволока частично перекрывает цифры, держалки экран не закрывают</td><td>Проволока частично перекрывает цифры</td><td>Проволока частично перекрывает цифры</td><td class="plus">Ничего не перекрывает, но нужен светоуплотнитель от бликов</td></tr>
+          <tr><td>Удары мяча</td><td>Устройство стоит в ложах, сверху не зафиксировано. Нужна губа 15–20 мм</td><td>Вес на язычке не зависит от магнитов. Магниты надо проверить на отрыв при ударе</td><td class="plus">Жёсткая механика, проверено временем на заборах</td><td class="minus">Стекло пружинит, дешёвые присоски отходят</td></tr>
+          <tr><td>Подгонка под корт</td><td class="plus">Любое устройство 6–13″: держалки разводятся по ячейкам</td><td class="plus">Не нужна: любой шаг и любая высота</td><td>Защёлка двигается под шаг 30–60 мм</td><td>Нужно чистое ровное место на стекле</td></tr>
+          <tr><td>Внешний вид</td><td class="plus">Минимум металла, почти невидимо с корта</td><td class="plus">Цельный предмет, как чехол с экраном</td><td>Технический кронштейн</td><td>Технический, видны помпы</td></tr>
+          <tr><td>Главный риск</td><td>Устройство можно просто снять. Для клуба нужен замок или своё устройство</td><td>Сила магнитов на тонкой круглой проволоке, проверяется только тестом</td><td>Царапает покраску сетки без ПВХ</td><td>Вакуум слабеет на холоде и в пыли</td></tr>
         </tbody>
       </table>
     </div>
@@ -587,10 +682,16 @@ footer a{color:inherit}
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const seg=(on,off)=>{on.setAttribute('aria-pressed','true'); off.setAttribute('aria-pressed','false');};
-let variant='clip', dev='phone';
+let variant='duo', dev='phone';
 
 /* ---------- content per variant ---------- */
 const PARTS={
+  duo:[
+    ['Держалки ×2','Одинаковые, из гнутой полосы 20 × 2 мм: нержавейка или алюминий с порошковой покраской'],
+    ['Крюк','Заходит в любую ячейку и ложится на проволоку. Вертикальные прутья не дают держалке уехать вбок'],
+    ['U-ложе с губой','Держит нижний угол устройства. Губа 15 мм спереди закрывает только рамку экрана'],
+    ['Накладки TPU','В ложе и на стойке: не царапают устройство и гасят вибрацию'],
+    ['Устройство с табло','Любой телефон или планшет 6–13″, держалки разводятся под его ширину']],
   clip:[
     ['Корпус Clip','Одна литая деталь в форме «пилюли»: ложемент, рамка экрана и крепления внутри. Поликарбонат или ASA'],
     ['Язычок','Пружинная сталь 25 × 1,5 мм. Заходит в любую ячейку сверху, ложится на проволоку и держит вес'],
@@ -613,6 +714,11 @@ const PARTS={
     ['Устройство с табло','Режим табло, плюс датчик наклона: приложение предупредит, если крепление съехало']]
 };
 const STEPS={
+  duo:[
+    ['Повесить первую держалку','Заведите крюк в ячейку на нужной высоте. Держалка повиснет стойкой вниз.'],
+    ['Приложить устройство','Прикиньте ширину устройства и повесьте вторую держалку в ячейку у другого края.'],
+    ['Поставить в ложа','Опустите устройство нижним краем в оба U-ложа, экраном к корту. Стойки окажутся позади.'],
+    ['Снять','Приподнимите устройство из лож. Держалки можно оставить на корте до следующей игры.']],
   clip:[
     ['Завести язычок','Снаружи корта заведите язычок в любую ячейку на нужной высоте. Он ляжет на горизонтальную проволоку.'],
     ['Опустить корпус','Корпус поворачивается на язычке к сетке. Магниты щёлкают о вертикальные прутья.'],
@@ -629,7 +735,8 @@ const STEPS={
     ['Пристегнуть тросик','Карабин на стойку или прижим стекла. Перед каждым матчем глянуть на индикаторы.'],
     ['Вставить устройство','Экран вплотную к стеклу, светоуплотнитель прижат. Режим табло и контроль наклона в приложении.']]
 };
-const TAGS={clip:{court:'<b>ВИД С КОРТА</b> · один корпус, ничего лишнего',side:'<b>ВИД СБОКУ</b> · язычок на проволоке, магниты на прутьях',back:'<b>ВИД СНАРУЖИ</b> · гладкая спинка, петля под тросик'},
+const TAGS={duo:{court:'<b>ВИД С КОРТА</b> · крюки сверху, губы снизу, экран открыт',side:'<b>ВИД СБОКУ</b> · стойка за устройством, ложе снизу',back:'<b>ВИД СНАРУЖИ</b> · две стойки держат устройство'},
+           clip:{court:'<b>ВИД С КОРТА</b> · один корпус, ничего лишнего',side:'<b>ВИД СБОКУ</b> · язычок на проволоке, магниты на прутьях',back:'<b>ВИД СНАРУЖИ</b> · гладкая спинка, петля под тросик'},
            mesh:{court:'<b>ВИД С КОРТА</b> · сетка между игроком и экраном',side:'<b>ВИД СБОКУ</b> · крюки сверху, защёлка снизу',back:'<b>ВИД СНАРУЖИ</b> · тыльная сторона и тросик'},
            glass:{court:'<b>ВИД С КОРТА</b> · экран за стеклом, без проволоки',side:'<b>ВИД СБОКУ</b> · присоски и траверса снаружи',back:'<b>ВИД СНАРУЖИ</b> · помпы с индикаторами и тросик'}};
 
@@ -756,7 +863,7 @@ function build(){
   mount=new THREE.Group(); scene.add(mount); parts={};
   fence.visible=variant!=='glass'; glassEnv.visible=variant==='glass';
   mount.position.x=variant==='clip'?2.5:0;
-  ({clip:buildClip,mesh:buildMesh,glass:buildGlass})[variant]();
+  ({duo:buildDuo,clip:buildClip,mesh:buildMesh,glass:buildGlass})[variant]();
   applyExplode();
 }
 function buildMesh(){
@@ -797,6 +904,46 @@ function roundedShape(w,h,r){
   const s=new THREE.Shape(), x=-w/2, y=-h/2;
   s.moveTo(x+r,y); s.lineTo(x+w-r,y); s.quadraticCurveTo(x+w,y,x+w,y+r); s.lineTo(x+w,y+h-r); s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
   s.lineTo(x+r,y+h); s.quadraticCurveTo(x,y+h,x,y+h-r); s.lineTo(x,y+r); s.quadraticCurveTo(x,y,x+r,y); return s;
+}
+function strip(group,mat,pts,w,t){
+  /* flat strip through (z,y) points, width w along x, thickness t */
+  for(let i=0;i<pts.length-1;i++){
+    const [z1,y1]=pts[i],[z2,y2]=pts[i+1], len=Math.hypot(z2-z1,y2-y1);
+    const b=new THREE.Mesh(new THREE.BoxGeometry(w,len+t,t),mat);
+    b.position.set(0,(y1+y2)/2,(z1+z2)/2); b.rotation.x=-Math.atan2(z2-z1,y2-y1); group.add(b);
+  }
+}
+function buildDuo(){
+  const tab=dev==='tab';
+  const dW=tab?25:16.3, dH=tab?17.8:7.7, dD=tab?.75:.95, by=tab?-11:-5;
+  const lipT=.25, front=-.63-lipT-.08, back=front-dD, zs=back-.2, ztop=.45;
+  const top=by+dH, wy=Math.ceil((top+1.2)/5)*5, yb=by-.25;
+  const steel=new THREE.MeshStandardMaterial({color:0x56636F,roughness:.35,metalness:.75});
+  const padM=M.rubber;
+  /* device */
+  const device=new THREE.Group(); parts.device=device; mount.add(device);
+  const body=new THREE.Mesh(new THREE.BoxGeometry(dW,dH,dD),M.body); body.position.set(0,by+dH/2,front-dD/2); device.add(body);
+  if(!screenTex){ screenTex=new THREE.CanvasTexture(scr); screenTex.anisotropy=4; }
+  drawScreen();
+  const sw=dW-.5, sh=Math.min(dH-.5,sw/2);
+  const screen=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),new THREE.MeshBasicMaterial({map:screenTex})); screen.position.set(0,by+dH/2,front+.01); device.add(screen);
+  /* two identical holders, hooks centred in mesh cells */
+  const want=dW/2-1.2, hx=Math.max(2.5,Math.round((want-2.5)/5)*5+2.5);
+  const holders=new THREE.Group(); parts.holders=holders; mount.add(holders);
+  const pads=new THREE.Group(); parts.pads=pads; mount.add(pads);
+  parts.hl=[]; 
+  [-hx,hx].forEach(x=>{
+    const h=new THREE.Group(); h.position.x=x; holders.add(h); parts.hl.push(h);
+    strip(h,steel,[[ztop,wy-.7],[ztop,wy+.32],[zs,wy+.32],[zs,yb],[front+lipT/2,yb],[front+lipT/2,yb+(tab?2:1.5)]],2,.22);
+    const p1=new THREE.Mesh(new THREE.BoxGeometry(2,.12,dD),padM); p1.position.set(x,yb+.17,front-dD/2); pads.add(p1);
+    const p2=new THREE.Mesh(new THREE.BoxGeometry(2,dH*.45,.12),padM); p2.position.set(x,by+dH*.4,zs+.17); pads.add(p2);
+  });
+  anchors=[
+    {g:holders,p:new THREE.Vector3(-hx,(wy+yb)/2,zs)},
+    {g:holders,p:new THREE.Vector3(hx,wy+.32,(ztop+zs)/2)},
+    {g:holders,p:new THREE.Vector3(hx,yb+.3,front+lipT)},
+    {g:pads,p:new THREE.Vector3(-hx,yb+.3,front-dD/2)},
+    {g:device,p:new THREE.Vector3(-sw*.18,by+dH/2+sh*.18,front)}];
 }
 function buildClip(){
   const tab=dev==='tab';
@@ -884,6 +1031,7 @@ function applyExplode(){
   parts.frame.position.set(0,0,-7*e);
   parts.device.position.set(0,0,-3.2*e);
   if(parts.cable) parts.cable.visible=e<.15;
+  if(variant==='duo'){ parts.device.position.set(0,0,-4*e); if(parts.hl){ parts.hl[0].position.x=-Math.abs(parts.hl[0].userData.x0??(parts.hl[0].userData.x0=parts.hl[0].position.x))-4*e; parts.hl[1].position.x=Math.abs(parts.hl[1].userData.x0??(parts.hl[1].userData.x0=parts.hl[1].position.x))+4*e; } parts.pads.position.set(0,0,-4*e); return; }
   if(variant==='clip'){ parts.shell.position.set(0,0,-6*e); parts.device.position.set(0,0,-3*e); parts.tongue.position.set(0,5*e,-6*e); parts.mag.position.set(0,-3*e,-1.5*e); parts.loop.position.set(0,0,-6*e); return; }
   if(variant==='mesh'){ parts.hooks.position.set(0,5*e,-7*e); parts.latch.position.set(0,-5*e,-7*e); parts.damp.position.set(0,0,1.6*e); }
   else { parts.bar.position.set(0,0,-11*e); parts.gasket.position.set(0,0,-1.2*e); parts.cups.position.set(0,0,-.5*e); }
@@ -936,7 +1084,7 @@ const P=(x,y)=>[OX+x*S, OY+y*S];
 let cDev='phone', cTwo=false;
 const R={phone:5, tab:11};
 const positions=[['Задняя линия, ближняя половина',2,2],['Задняя линия, дальний угол',2,8],['У сетки',7,5],['Задняя линия, другая половина',18,8]];
-const MOUNTS={clip:{one:[[10,0]],two:[[5,0],[15,0]]},mesh:{one:[[10,0]],two:[[5,0],[15,0]]},glass:{one:[[3,0]],two:[[3,0],[17,10]]}};
+const MOUNTS={duo:{one:[[10,0]],two:[[5,0],[15,0]]},clip:{one:[[10,0]],two:[[5,0],[15,0]]},mesh:{one:[[10,0]],two:[[5,0],[15,0]]},glass:{one:[[3,0]],two:[[3,0],[17,10]]}};
 const mounts=()=>MOUNTS[variant][cTwo?'two':'one'];
 function drawPlan(){
   const r=R[cDev], ms=mounts(), ink=css('--ink'), muted=css('--muted');
@@ -978,7 +1126,7 @@ function setVariant(v){
 vBtns.forEach(b=>b.addEventListener('click',()=>setVariant(b.dataset.v)));
 
 resize(); camera.position.set(24,9,40);
-setVariant(['#mesh','#glass','#clip'].includes(location.hash)?location.hash.slice(1):'clip');
+setVariant(['#mesh','#glass','#clip','#duo'].includes(location.hash)?location.hash.slice(1):'duo');
 requestAnimationFrame(frameLoop);
 document.fonts && document.fonts.ready.then(drawScreen);
 })();
