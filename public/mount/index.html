@@ -134,8 +134,14 @@ footer a{color:inherit}
   <header class="hero">
     <div class="eyebrow">Bandeja · аксессуар для корта · концепт v0.1</div>
     <h1>Крепление табло на корт: сетка или стекло</h1>
-    <p>Одна рамка для телефона или планшета и два способа крепления снаружи корта. На металлическую сетку она вешается на крюках, на стекло ставится на вакуумных присосках. Экран смотрит на игроков, а внутри корта ничего нет: игре крепление не мешает.</p>
-    <div class="specs" data-variant="mesh">
+    <p>Три способа повесить телефон или планшет со счётом снаружи корта: цельный корпус Clip на сетку, рамка на крюках на сетку и рамка на присосках на стекло. Экран смотрит на игроков, а внутри корта ничего нет, поэтому игре крепление не мешает.</p>
+    <div class="specs" data-variant="clip">
+      <span class="spec">деталей <b>1 корпус</b></span>
+      <span class="spec">ставится <b>одной рукой</b></span>
+      <span class="spec">любой шаг сетки <b>5–7 см</b></span>
+      <span class="spec">в корт выступает <b>0 мм</b></span>
+    </div>
+    <div class="specs" data-variant="mesh" hidden>
       <span class="spec">сетка FIP: ячейка <b>5–7 см</b>, проволока <b>2–4 мм</b></span>
       <span class="spec">высота подвеса <b>1,6–1,8 м</b></span>
       <span class="spec">наклон ложемента <b>0–15°</b></span>
@@ -150,10 +156,11 @@ footer a{color:inherit}
     <div class="variant">
       <span class="tlabel">Вариант</span>
       <div class="seg" role="group" aria-label="Вариант крепления">
-        <button type="button" id="vMesh" aria-pressed="true">На сетку</button>
-        <button type="button" id="vGlass" aria-pressed="false">На стекло</button>
+        <button type="button" data-v="clip" aria-pressed="true">Сетка · Clip</button>
+        <button type="button" data-v="mesh" aria-pressed="false">Сетка · крюки</button>
+        <button type="button" data-v="glass" aria-pressed="false">Стекло</button>
       </div>
-      <p>Переключает всю страницу: модель, чертёж, установку и схему корта.</p>
+      <p>Переключает всю страницу: модель, чертёж, установку и схему корта. Clip — рекомендуемый вариант для кортов с сеткой.</p>
     </div>
   </header>
 </div>
@@ -162,7 +169,7 @@ footer a{color:inherit}
   <div class="wrap">
     <div class="head">
       <div class="eyebrow">3D-модель</div>
-      <h2 data-variant="mesh">Как крепление сидит на сетке</h2><h2 data-variant="glass" hidden>Как крепление стоит на стекле</h2>
+      <h2 data-variant="clip">Как Clip сидит на сетке</h2><h2 data-variant="mesh" hidden>Как крепление сидит на сетке</h2><h2 data-variant="glass" hidden>Как крепление стоит на стекле</h2>
       <p>Крутите модель мышью или пальцем. Номера на модели совпадают со списком деталей. Режим «Разнесено» показывает, из чего собрано крепление.</p>
     </div>
     <div class="viewer">
@@ -206,10 +213,11 @@ footer a{color:inherit}
     <div class="head">
       <div class="eyebrow">Чертёж · версия для телефона</div>
       <h2>Вид с корта и разрез сбоку</h2>
-      <p data-variant="mesh">Размеры в миллиметрах. Защёлка ездит по вертикали, поэтому одно крепление подходит под разный шаг сетки.</p>
+      <p data-variant="clip">Размеры в миллиметрах. Вес держит один язычок, магниты только прижимают корпус к прутьям. Поэтому шаг сетки не важен и ничего не нужно подгонять.</p>
+      <p data-variant="mesh" hidden>Размеры в миллиметрах. Защёлка ездит по вертикали, поэтому одно крепление подходит под разный шаг сетки.</p>
       <p data-variant="glass" hidden>Размеры в миллиметрах. Экран прижат к стеклу вплотную через светоуплотнитель, присоски стоят по бокам на одной траверсе.</p>
     </div>
-    <div id="drawMesh" data-variant="mesh">
+    <div id="drawMesh" data-variant="mesh" hidden>
     <div class="sheet">
       <svg viewBox="0 0 820 430" role="img" aria-label="Чертёж крепления: вид с корта и разрез сбоку с размерами">
         <defs>
@@ -303,6 +311,88 @@ footer a{color:inherit}
         </tbody>
       </table>
         </div>
+    </div>
+    <div id="drawClip" data-variant="clip" hidden>
+    <div class="sheet">
+      <svg viewBox="0 0 820 430" role="img" aria-label="Чертёж крепления Clip: вид с корта и разрез сбоку с размерами">
+        <defs><marker id="dC" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" fill="var(--dim)"/></marker></defs>
+        <text x="40" y="28" font-size="12" fill="var(--muted)" letter-spacing="1.2">ВИД С КОРТА</text>
+        <text x="500" y="28" font-size="12" fill="var(--muted)" letter-spacing="1.2">РАЗРЕЗ СБОКУ</text>
+        <g stroke="var(--line)" stroke-width="2">
+          <line x1="40" y1="40" x2="40" y2="400"/><line x1="115" y1="40" x2="115" y2="400"/><line x1="190" y1="40" x2="190" y2="400"/><line x1="265" y1="40" x2="265" y2="400"/><line x1="340" y1="40" x2="340" y2="400"/><line x1="415" y1="40" x2="415" y2="400"/>
+          <line x1="50" y1="45" x2="410" y2="45"/><line x1="50" y1="120" x2="410" y2="120"/><line x1="50" y1="195" x2="410" y2="195"/><line x1="50" y1="270" x2="410" y2="270"/><line x1="50" y1="345" x2="410" y2="345"/>
+        </g>
+        <rect x="208.75" y="108" width="37.5" height="26" rx="4" fill="var(--ball)" stroke="var(--ink)" stroke-width="1.2"/>
+        <rect x="80.5" y="130.5" width="294" height="159" rx="40" fill="#0D2131" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="98.5" y="146.5" width="258" height="117" rx="20" fill="#0B1B28" stroke="#1D3A50" stroke-width="1.5"/>
+        <text x="180" y="208" font-size="30" font-weight="600" fill="#FFFFFF" text-anchor="middle">40</text>
+        <text x="276" y="208" font-size="30" font-weight="600" fill="#FFFFFF" text-anchor="middle">30</text>
+        <text x="228" y="236" font-size="11" fill="#F1C823" text-anchor="middle">ГЕЙМЫ 3 : 2</text>
+        <rect x="108" y="272" width="240" height="9" rx="4.5" fill="#3A4A58"/>
+        <g fill="var(--ball)"><circle cx="115" cy="276.5" r="4"/><circle cx="190" cy="276.5" r="4"/><circle cx="265" cy="276.5" r="4"/><circle cx="340" cy="276.5" r="4"/></g>
+        <g font-size="12"><circle cx="196" cy="103" r="9" fill="var(--ball)"/><text x="196" y="107" text-anchor="middle" fill="#1A1600" font-weight="600">2</text>
+          <circle cx="94" cy="140" r="9" fill="var(--ball)"/><text x="94" y="144" text-anchor="middle" fill="#1A1600" font-weight="600">1</text>
+          <circle cx="362" cy="296" r="9" fill="var(--ball)"/><text x="362" y="300" text-anchor="middle" fill="#1A1600" font-weight="600">3</text></g>
+        <g stroke="var(--dim)" stroke-width="1" fill="none">
+          <line x1="80.5" y1="296" x2="80.5" y2="392"/><line x1="374.5" y1="296" x2="374.5" y2="392"/>
+          <line x1="80.5" y1="384" x2="374.5" y2="384" marker-start="url(#dC)" marker-end="url(#dC)"/>
+          <line x1="74" y1="130.5" x2="50" y2="130.5"/><line x1="74" y1="289.5" x2="50" y2="289.5"/>
+          <line x1="56" y1="130.5" x2="56" y2="289.5" marker-start="url(#dC)" marker-end="url(#dC)"/>
+          <line x1="208.75" y1="104" x2="208.75" y2="70"/><line x1="246.25" y1="104" x2="246.25" y2="70"/>
+          <line x1="184" y1="76" x2="208.75" y2="76" marker-end="url(#dC)"/><line x1="271" y1="76" x2="246.25" y2="76" marker-end="url(#dC)"/>
+        </g>
+        <g fill="var(--dim)" font-size="13" font-weight="600">
+          <text x="227.5" y="378" text-anchor="middle">196</text>
+          <text x="42" y="214" text-anchor="middle">106</text>
+          <text x="276" y="72">25</text>
+        </g>
+        <text x="392" y="281" font-size="11.5" fill="var(--muted)">магниты ловят</text>
+        <text x="392" y="296" font-size="11.5" fill="var(--muted)">любые 3–4 прута</text>
+
+        <g stroke="var(--line)" stroke-width="2"><line x1="643" y1="40" x2="643" y2="400"/></g>
+        <g fill="var(--steel)"><circle cx="638" cy="45" r="4"/><circle cx="638" cy="120" r="4"/><circle cx="638" cy="195" r="4"/><circle cx="638" cy="270" r="4"/><circle cx="638" cy="345" r="4"/></g>
+        <text x="560" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">КОРТ</text>
+        <text x="740" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">СНАРУЖИ</text>
+        <path d="M672 140 V113 H632 Q629 113 629 116" fill="none" stroke="var(--ball)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="646" y="130.5" width="30" height="159" rx="12" fill="#0D2131" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="649" y="148" width="12" height="114" rx="3" fill="#0B1B28" stroke="#1D3A50"/>
+        <rect x="645" y="268" width="4" height="16" rx="1.5" fill="var(--ball)"/>
+        <circle cx="684" cy="282" r="5" fill="none" stroke="var(--steel)" stroke-width="2"/>
+        <g font-size="12"><circle cx="690" cy="108" r="9" fill="var(--ball)"/><text x="690" y="112" text-anchor="middle" fill="#1A1600" font-weight="600">2</text>
+          <circle cx="626" cy="276" r="9" fill="var(--ball)"/><text x="626" y="280" text-anchor="middle" fill="#1A1600" font-weight="600">3</text>
+          <circle cx="700" cy="292" r="9" fill="var(--ball)"/><text x="700" y="296" text-anchor="middle" fill="#1A1600" font-weight="600">4</text>
+          <circle cx="690" cy="168" r="9" fill="var(--ball)"/><text x="690" y="172" text-anchor="middle" fill="#1A1600" font-weight="600">1</text></g>
+        <g stroke="var(--dim)" stroke-width="1" fill="none">
+          <line x1="646" y1="300" x2="646" y2="352"/><line x1="676" y1="296" x2="676" y2="352"/>
+          <line x1="646" y1="346" x2="676" y2="346" marker-start="url(#dC)" marker-end="url(#dC)"/>
+          <line x1="629" y1="104" x2="629" y2="80"/><line x1="634" y1="104" x2="634" y2="80"/>
+        </g>
+        <g fill="var(--dim)" font-size="13" font-weight="600">
+          <text x="661" y="370" text-anchor="middle">20</text>
+          <text x="620" y="82" text-anchor="end">0 мм за сетку</text>
+        </g>
+        <text x="712" y="150" font-size="11.5" fill="var(--muted)">язычок лежит</text>
+        <text x="712" y="165" font-size="11.5" fill="var(--muted)">на проволоке</text>
+      </svg>
+    </div>
+    <div class="sheet-foot">
+      <span><b>Масштаб</b> 1 : 0,67 (1 мм = 1,5 px)</span>
+      <span><b>Жёлтым</b> — язычок и магнитная полоса, всё остальное — один корпус</span>
+      <span><b>Шаг сетки</b> не важен: язычок входит в любую ячейку, полоса всегда накрывает 3–4 прута</span>
+    </div>
+    <div class="dims-wrap">
+      <table class="dims">
+        <thead><tr><th>Параметр</th><th>Телефон 6,7″</th><th>Планшет 11″</th></tr></thead>
+        <tbody>
+          <tr><td>Габарит корпуса, мм</td><td>196 × 106 × 20</td><td>284 × 206 × 20</td></tr>
+          <tr><td>Деталей в креплении</td><td>1 корпус</td><td>1 корпус</td></tr>
+          <tr><td>Язычок, пружинная сталь, мм</td><td>25 × 1,5</td><td>35 × 2</td></tr>
+          <tr><td>Магнитная полоса</td><td>5 магнитов N52 в TPU</td><td>7 магнитов N52 в TPU</td></tr>
+          <tr><td>Выступ за плоскость сетки в корт, мм</td><td>0</td><td>0</td></tr>
+          <tr><td>Масса крепления без устройства, г</td><td>≈ 110</td><td>≈ 210</td></tr>
+        </tbody>
+      </table>
+    </div>
     </div>
     <div id="drawGlass" data-variant="glass" hidden>
     <div class="sheet">
@@ -403,7 +493,7 @@ footer a{color:inherit}
   <div class="wrap">
     <div class="head">
       <div class="eyebrow">Установка</div>
-      <h2 data-variant="mesh">Повесить за 10 секунд, без инструментов</h2><h2 data-variant="glass" hidden>Поставить за полминуты, без инструментов</h2>
+      <h2 data-variant="clip">Одной рукой за 3 секунды</h2><h2 data-variant="mesh" hidden>Повесить за 10 секунд, без инструментов</h2><h2 data-variant="glass" hidden>Поставить за полминуты, без инструментов</h2>
     </div>
     <ol class="steps" id="steps"></ol>
   </div>
@@ -450,22 +540,24 @@ footer a{color:inherit}
   <div class="wrap">
     <div class="head">
       <div class="eyebrow">Сравнение</div>
-      <h2>Сетка или стекло</h2>
-      <p>Рамка и устройство общие, отличается только узел крепления. В клуб можно возить оба: какой ставить, решается по корту.</p>
+      <h2>Три варианта крепления</h2>
+      <p>Для кортов с сеткой лучше Clip: меньше деталей, быстрее ставится, лучше выглядит. Вариант на крюках остаётся запасным, если магниты не пройдут тест на удар. Стекло нужно для панорамных кортов.</p>
     </div>
     <div class="cmp-wrap">
       <table class="cmp">
-        <thead><tr><th></th><th>На сетку</th><th>На стекло</th></tr></thead>
+        <thead><tr><th></th><th>Сетка · Clip</th><th>Сетка · крюки</th><th>Стекло</th></tr></thead>
         <tbody>
-          <tr><td>Где работает</td><td>Корты с сеткой на боковых стенах, это большинство кортов</td><td class="plus">Любой корт, в том числе панорамный, где сетки нет совсем</td></tr>
-          <tr><td>Видимость</td><td>Проволока 2–4 мм частично перекрывает цифры, особенно под углом</td><td class="plus">Ничего не перекрывает. Минус: на стекле бликуют лампы, нужен светоуплотнитель</td></tr>
-          <tr><td>Удары мяча</td><td class="plus">Держится механически, вакуума нет. Вибрацию гасят демпферы</td><td class="minus">Стекло пружинит от удара, дешёвые присоски могут отойти. Нужны помпа, индикатор и тросик</td></tr>
-          <tr><td>Установка</td><td class="plus">10 секунд: повесил, защёлкнул</td><td>30 секунд: протереть стекло, подкачать, проверить индикатор</td></tr>
-          <tr><td>Где ставить</td><td>Боковая сетка у линии сетки корта, видно обеим парам</td><td>Боковое стекло у задней стенки, крайние 4 м корта</td></tr>
-          <tr><td>Риски</td><td>Может поцарапать покраску сетки, если крюки без ПВХ</td><td>Холод, пыль и солнце ослабляют вакуум. Перед матчем нужна проверка</td></tr>
-          <tr><td>Себестоимость прототипа</td><td class="plus">Печать рамки и гнутая проволока</td><td>Печать рамки и две покупные присоски с помпой: они дороже всего остального</td></tr>
+          <tr><td>Где работает</td><td>Корты с сеткой на боковых стенах</td><td>Корты с сеткой на боковых стенах</td><td class="plus">Любой корт, в том числе панорамный без сетки</td></tr>
+          <tr><td>Деталей</td><td class="plus">1 корпус со встроенными язычком и магнитами</td><td>Рамка, 2 крюка, защёлка, 4 демпфера, тросик</td><td>Рамка, 2 присоски, траверса, уплотнитель, тросик</td></tr>
+          <tr><td>Установка</td><td class="plus">3 секунды одной рукой: завёл язычок, опустил, щёлкнуло</td><td>10 секунд: повесил, защёлкнул, пристегнул</td><td>30 секунд: протереть, подкачать, проверить индикатор</td></tr>
+          <tr><td>Видимость</td><td>Проволока частично перекрывает цифры</td><td>Проволока частично перекрывает цифры</td><td class="plus">Ничего не перекрывает, но нужен светоуплотнитель от бликов</td></tr>
+          <tr><td>Удары мяча</td><td>Вес на язычке не зависит от магнитов. Магниты надо проверить на отрыв при ударе</td><td class="plus">Жёсткая механика, проверено временем на заборах</td><td class="minus">Стекло пружинит, дешёвые присоски отходят</td></tr>
+          <tr><td>Подгонка под корт</td><td class="plus">Не нужна: любой шаг и любая высота</td><td>Защёлка двигается под шаг 30–60 мм</td><td>Нужно чистое ровное место на стекле</td></tr>
+          <tr><td>Внешний вид</td><td class="plus">Цельный предмет, как чехол с экраном</td><td>Технический кронштейн</td><td>Технический, видны помпы</td></tr>
+          <tr><td>Главный риск</td><td>Сила магнитов на тонкой круглой проволоке, проверяется только тестом</td><td>Царапает покраску сетки без ПВХ</td><td>Вакуум слабеет на холоде и в пыли</td></tr>
         </tbody>
       </table>
+    </div>
     </div>
   </div>
 </section>
@@ -495,10 +587,16 @@ footer a{color:inherit}
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const seg=(on,off)=>{on.setAttribute('aria-pressed','true'); off.setAttribute('aria-pressed','false');};
-let variant='mesh', dev='phone';
+let variant='clip', dev='phone';
 
 /* ---------- content per variant ---------- */
 const PARTS={
+  clip:[
+    ['Корпус Clip','Одна литая деталь в форме «пилюли»: ложемент, рамка экрана и крепления внутри. Поликарбонат или ASA'],
+    ['Язычок','Пружинная сталь 25 × 1,5 мм. Заходит в любую ячейку сверху, ложится на проволоку и держит вес'],
+    ['Магнитная полоса','5 неодимовых магнитов в TPU с V-образными накладками под пруток. Прижимает корпус и гасит вибрацию'],
+    ['Петля под тросик','Встроена в корпус снизу. Для клубов, где табло висит постоянно'],
+    ['Устройство с табло','Вставляется снизу до щелчка. Режим табло: экран не гаснет, крупные цифры']],
   mesh:[
     ['Рамка-ложемент','Держит устройство по периметру, окно под экран. PETG или ASA, не плывёт на солнце'],
     ['Верхние крюки ×2','Сталь Ø3 мм в ПВХ. Лежат на горизонтальной проволоке и несут вес'],
@@ -515,6 +613,11 @@ const PARTS={
     ['Устройство с табло','Режим табло, плюс датчик наклона: приложение предупредит, если крепление съехало']]
 };
 const STEPS={
+  clip:[
+    ['Завести язычок','Снаружи корта заведите язычок в любую ячейку на нужной высоте. Он ляжет на горизонтальную проволоку.'],
+    ['Опустить корпус','Корпус поворачивается на язычке к сетке. Магниты щёлкают о вертикальные прутья.'],
+    ['Вставить устройство','Телефон заходит в ложемент снизу до щелчка, экраном к корту. Включите режим табло.'],
+    ['Снять одной рукой','Отведите низ корпуса от сетки, чтобы оторвать магниты, и поднимите язычок из ячейки.']],
   mesh:[
     ['Завести крюки','Снаружи корта просуньте оба крюка в ячейку над рамкой и положите их на горизонтальную проволоку.'],
     ['Опустить до щелчка','Рамка опускается под весом. Защёлка проскакивает под нижнюю проволоку и запирает крепление.'],
@@ -526,7 +629,8 @@ const STEPS={
     ['Пристегнуть тросик','Карабин на стойку или прижим стекла. Перед каждым матчем глянуть на индикаторы.'],
     ['Вставить устройство','Экран вплотную к стеклу, светоуплотнитель прижат. Режим табло и контроль наклона в приложении.']]
 };
-const TAGS={mesh:{court:'<b>ВИД С КОРТА</b> · сетка между игроком и экраном',side:'<b>ВИД СБОКУ</b> · крюки сверху, защёлка снизу',back:'<b>ВИД СНАРУЖИ</b> · тыльная сторона и тросик'},
+const TAGS={clip:{court:'<b>ВИД С КОРТА</b> · один корпус, ничего лишнего',side:'<b>ВИД СБОКУ</b> · язычок на проволоке, магниты на прутьях',back:'<b>ВИД СНАРУЖИ</b> · гладкая спинка, петля под тросик'},
+           mesh:{court:'<b>ВИД С КОРТА</b> · сетка между игроком и экраном',side:'<b>ВИД СБОКУ</b> · крюки сверху, защёлка снизу',back:'<b>ВИД СНАРУЖИ</b> · тыльная сторона и тросик'},
            glass:{court:'<b>ВИД С КОРТА</b> · экран за стеклом, без проволоки',side:'<b>ВИД СБОКУ</b> · присоски и траверса снаружи',back:'<b>ВИД СНАРУЖИ</b> · помпы с индикаторами и тросик'}};
 
 const partsEl=document.getElementById('parts'), stepsEl=document.getElementById('steps');
@@ -650,8 +754,9 @@ let mount=null, parts={}, anchors=[];
 function build(){
   if(mount){ scene.remove(mount); mount.traverse(o=>{ if(o.geometry) o.geometry.dispose(); }); }
   mount=new THREE.Group(); scene.add(mount); parts={};
-  fence.visible=variant==='mesh'; glassEnv.visible=variant==='glass';
-  (variant==='mesh'?buildMesh:buildGlass)();
+  fence.visible=variant!=='glass'; glassEnv.visible=variant==='glass';
+  mount.position.x=variant==='clip'?2.5:0;
+  ({clip:buildClip,mesh:buildMesh,glass:buildGlass})[variant]();
   applyExplode();
 }
 function buildMesh(){
@@ -687,6 +792,52 @@ function buildMesh(){
     {g:damp,p:new THREE.Vector3(W/2-1.6,bot+1.6,zc+D/2+.3)},
     {g:cable,p:new THREE.Vector3(vx,cy-H*.3,-.6)},
     {g:device,p:new THREE.Vector3(-sw*.18,cy+sh*.18,zc+.1)}];
+}
+function roundedShape(w,h,r){
+  const s=new THREE.Shape(), x=-w/2, y=-h/2;
+  s.moveTo(x+r,y); s.lineTo(x+w-r,y); s.quadraticCurveTo(x+w,y,x+w,y+r); s.lineTo(x+w,y+h-r); s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h); s.quadraticCurveTo(x,y+h,x,y+h-r); s.lineTo(x,y+r); s.quadraticCurveTo(x,y,x+r,y); return s;
+}
+function buildClip(){
+  const tab=dev==='tab';
+  const W=tab?28.4:19.6, H=tab?20.6:10.6, R=tab?3.4:2.7, cy=tab?-3:-1, depth=1.5, bev=.25;
+  const front=-.68, z0=front-depth-bev, top=cy+H/2, bot=cy-H/2;
+  const shellM=new THREE.MeshStandardMaterial({color:0x0D2131,roughness:.55,metalness:.05});
+  const shell=new THREE.Group(); parts.shell=shell; mount.add(shell);
+  const outer=roundedShape(W,H,R), hw=W-2.2, hh=H-2.2, hole=roundedShape(hw,hh,Math.max(.8,R-1.1));
+  outer.holes.push(hole);
+  const ring=new THREE.Mesh(new THREE.ExtrudeGeometry(outer,{depth,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:5,curveSegments:28}),shellM);
+  ring.position.set(0,cy,z0); shell.add(ring);
+  const backG=new THREE.ExtrudeGeometry(roundedShape(W,H,R),{depth:.35,bevelEnabled:true,bevelThickness:.15,bevelSize:.25,bevelSegments:4,curveSegments:28});
+  const back=new THREE.Mesh(backG,shellM); back.position.set(0,cy,z0-.2); shell.add(back);
+  const accent=new THREE.Mesh(new THREE.BoxGeometry(W*.28,.18,.06),M.latch); accent.position.set(0,bot+.55,front+.03); shell.add(accent);
+  /* device */
+  const device=new THREE.Group(); parts.device=device; mount.add(device);
+  const dD=tab?.7:.85, body=new THREE.Mesh(new THREE.BoxGeometry(hw+.6,hh+.6,dD),M.body); body.position.set(0,cy,front-.25-dD/2); device.add(body);
+  if(!screenTex){ screenTex=new THREE.CanvasTexture(scr); screenTex.anisotropy=4; }
+  drawScreen();
+  const sw=hw-.3, sh=Math.min(hh-.3,sw/2);
+  const screen=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),new THREE.MeshBasicMaterial({map:screenTex})); screen.position.set(0,cy,front-.25+.01); device.add(screen);
+  /* spring-steel tongue: up out of the back, over one horizontal wire */
+  const tongue=new THREE.Group(); parts.tongue=tongue; mount.add(tongue);
+  const wireTop=Math.ceil((top+0.3)/5)*5, ty=wireTop+.3, tw=tab?3.5:2.5, tz=z0+.15;
+  const v=new THREE.Mesh(new THREE.BoxGeometry(tw,ty-(top-1.2),.16),M.latch); v.position.set(0,(ty+top-1.2)/2,tz); tongue.add(v);
+  const hz=new THREE.Mesh(new THREE.BoxGeometry(tw,.16,.12-tz),M.latch); hz.position.set(0,ty,(tz+.12)/2); tongue.add(hz);
+  const lip=new THREE.Mesh(new THREE.BoxGeometry(tw,.3,.16),M.latch); lip.position.set(0,ty-.12,.14); tongue.add(lip);
+  /* magnetic strip with V pads on each vertical wire it crosses */
+  const mag=new THREE.Group(); parts.mag=mag; mount.add(mag);
+  const sw2=W-2*R, sy=bot+.65;
+  const strip=new THREE.Mesh(new THREE.BoxGeometry(sw2,.7,.08),new THREE.MeshStandardMaterial({color:0x3A4A58,roughness:.7})); strip.position.set(0,sy,front+.04); mag.add(strip);
+  for(let k=-10;k<=10;k++){ const lx=k*5-2.5; if(Math.abs(lx)<=sw2/2-.4){ const pad=new THREE.Mesh(new THREE.BoxGeometry(.7,.8,.1),M.latch); pad.position.set(lx,sy,front+.09); mag.add(pad); } }
+  /* lanyard loop moulded in the bottom corner */
+  const loopG=new THREE.Group(); parts.loop=loopG; mount.add(loopG);
+  const lp=new THREE.Mesh(new THREE.TorusGeometry(.55,.16,10,24),shellM); lp.position.set(W/2-R*.6,bot-.15,z0+.6); lp.rotation.y=Math.PI/2; loopG.add(lp);
+  anchors=[
+    {g:shell,p:new THREE.Vector3(-W/2+R*.5,top-R*.4,front)},
+    {g:tongue,p:new THREE.Vector3(0,ty,-.8)},
+    {g:mag,p:new THREE.Vector3(sw2/2-1,sy,front+.1)},
+    {g:loopG,p:new THREE.Vector3(W/2-R*.6,bot-.15,z0+.6)},
+    {g:device,p:new THREE.Vector3(-sw*.18,cy+sh*.18,front-.25)}];
 }
 function buildGlass(){
   const tab=dev==='tab';
@@ -732,7 +883,8 @@ function applyExplode(){
   if(!parts.frame) return;
   parts.frame.position.set(0,0,-7*e);
   parts.device.position.set(0,0,-3.2*e);
-  parts.cable.visible=e<.15;
+  if(parts.cable) parts.cable.visible=e<.15;
+  if(variant==='clip'){ parts.shell.position.set(0,0,-6*e); parts.device.position.set(0,0,-3*e); parts.tongue.position.set(0,5*e,-6*e); parts.mag.position.set(0,-3*e,-1.5*e); parts.loop.position.set(0,0,-6*e); return; }
   if(variant==='mesh'){ parts.hooks.position.set(0,5*e,-7*e); parts.latch.position.set(0,-5*e,-7*e); parts.damp.position.set(0,0,1.6*e); }
   else { parts.bar.position.set(0,0,-11*e); parts.gasket.position.set(0,0,-1.2*e); parts.cups.position.set(0,0,-.5*e); }
 }
@@ -744,7 +896,7 @@ function makeHots(){
 }
 function select(i){ selected=selected===i?-1:i; partsEl.querySelectorAll('.part').forEach((b,j)=>b.classList.toggle('on',j===selected)); hots.forEach((h,j)=>h&&h.classList.toggle('on',j===selected)); }
 
-const VIEWS={court:[24,9,40],side:[118,4,-3],back:[-30,12,-55]};
+const VIEWS={court:[24,9,40],side:[92,10,26],back:[-30,12,-55]};
 let camGoal=null, curView='court';
 function setView(k){
   curView=k;
@@ -784,7 +936,7 @@ const P=(x,y)=>[OX+x*S, OY+y*S];
 let cDev='phone', cTwo=false;
 const R={phone:5, tab:11};
 const positions=[['Задняя линия, ближняя половина',2,2],['Задняя линия, дальний угол',2,8],['У сетки',7,5],['Задняя линия, другая половина',18,8]];
-const MOUNTS={mesh:{one:[[10,0]],two:[[5,0],[15,0]]},glass:{one:[[3,0]],two:[[3,0],[17,10]]}};
+const MOUNTS={clip:{one:[[10,0]],two:[[5,0],[15,0]]},mesh:{one:[[10,0]],two:[[5,0],[15,0]]},glass:{one:[[3,0]],two:[[3,0],[17,10]]}};
 const mounts=()=>MOUNTS[variant][cTwo?'two':'one'];
 function drawPlan(){
   const r=R[cDev], ms=mounts(), ink=css('--ink'), muted=css('--muted');
@@ -799,14 +951,14 @@ function drawPlan(){
   positions.forEach(([n,x,y],i)=>{ const [px,py]=P(x,y); const ok=ms.some(([mx,my])=>Math.hypot(x-mx,y-my)<=r);
     h+=`<circle cx="${px}" cy="${py}" r="10" fill="${ok?'#FFFFFF':'#0B1B28'}" stroke="${ok?'#1F8A5B':'#C8372D'}" stroke-width="3"/><text x="${px}" y="${py+4}" font-size="11" text-anchor="middle" font-weight="600" fill="${ok?'#0A1F2E':'#FFFFFF'}">${i+1}</text>`; });
   ms.forEach(([x,y])=>{ const [px,py]=P(x,y), up=y===0; h+=`<rect x="${px-14}" y="${up?py-16:py+4}" width="28" height="12" rx="3" fill="#F1C823" stroke="#0A1F2E" stroke-width="1.5"/>`; });
-  h+=`<text x="${OX}" y="${OY-22}" font-size="12" fill="${muted}">${variant==='mesh'?'крепление на боковой сетке у линии сетки корта':'крепление на боковом стекле у задней стенки'}</text>`;
+  h+=`<text x="${OX}" y="${OY-22}" font-size="12" fill="${muted}">${variant!=='glass'?'крепление на боковой сетке у линии сетки корта':'крепление на боковом стекле у задней стенки'}</text>`;
   h+=`<text x="${OX}" y="${OY+10*S+28}" font-size="12" fill="${muted}">стекло — голубым, сетка — пунктиром</text>`;
   h+=`<text x="${OX+20*S}" y="${OY+10*S+28}" font-size="12" fill="${muted}" text-anchor="end">корт 20 × 10 м</text>`;
   svg.innerHTML=h;
   let inside=0,tot=0; for(let x=.05;x<20;x+=.1) for(let y=.05;y<10;y+=.1){ tot++; if(ms.some(([mx,my])=>Math.hypot(x-mx,y-my)<=r)) inside++; }
   document.getElementById('covPct').textContent=Math.round(inside/tot*100)+'%';
   document.getElementById('covPos').innerHTML=positions.map(([n,x,y],i)=>{ const ok=ms.some(([mx,my])=>Math.hypot(x-mx,y-my)<=r); return `<div><span>${i+1}. ${n}</span><span class="${ok?'yes':'no'}">${ok?'видно':'не видно'}</span></div>`; }).join('');
-  document.getElementById('cTwo').textContent=variant==='mesh'?'Два, по одному на половину':'Два, по диагонали';
+  document.getElementById('cTwo').textContent=variant!=='glass'?'Два, по одному на половину':'Два, по диагонали';
 }
 const cPhone=document.getElementById('cPhone'), cTab=document.getElementById('cTab'), cOne=document.getElementById('cOne'), cTwoB=document.getElementById('cTwo');
 cPhone.onclick=()=>{cDev='phone';seg(cPhone,cTab);drawPlan();};
@@ -816,17 +968,17 @@ cTwoB.onclick=()=>{cTwo=true;seg(cTwoB,cOne);drawPlan();};
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawPlan);
 
 /* ---------- variant switch (whole page) ---------- */
-const vMesh=document.getElementById('vMesh'), vGlass=document.getElementById('vGlass');
+const vBtns=[...document.querySelectorAll('[data-v]')];
 function setVariant(v){
-  variant=v; v==='mesh'?seg(vMesh,vGlass):seg(vGlass,vMesh);
+  variant=v; vBtns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===v)));
   document.querySelectorAll('[data-variant]').forEach(el=>{ el.hidden=el.dataset.variant!==v; });
   renderLists(); build(); makeHots(); setView(curView); drawPlan();
-  try{ history.replaceState(null,'',v==='glass'?'#glass':'#mesh'); }catch(e){}
+  try{ history.replaceState(null,'','#'+v); }catch(e){}
 }
-vMesh.onclick=()=>setVariant('mesh'); vGlass.onclick=()=>setVariant('glass');
+vBtns.forEach(b=>b.addEventListener('click',()=>setVariant(b.dataset.v)));
 
 resize(); camera.position.set(24,9,40);
-setVariant(location.hash==='#glass'?'glass':'mesh');
+setVariant(['#mesh','#glass','#clip'].includes(location.hash)?location.hash.slice(1):'clip');
 requestAnimationFrame(frameLoop);
 document.fonts && document.fonts.ready.then(drawScreen);
 })();
