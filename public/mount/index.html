@@ -189,8 +189,8 @@ footer a{color:inherit}
         <div class="toolbar">
           <div><span class="tlabel">Устройство</span>
             <div class="seg" role="group" aria-label="Устройство">
-              <button type="button" id="devPhone" aria-pressed="true">Телефон 6,7″</button>
-              <button type="button" id="devTab" aria-pressed="false">Планшет 11″</button>
+              <button type="button" id="devPhone" aria-pressed="true">iPhone 16 Pro Max</button>
+              <button type="button" id="devTab" aria-pressed="false">iPad Air 11″</button>
             </div></div>
           <div><span class="tlabel">Сборка</span>
             <div class="seg" role="group" aria-label="Сборка">
@@ -691,27 +691,27 @@ const PARTS={
     ['Крюк','Заходит в любую ячейку и ложится на проволоку. Вертикальные прутья не дают держалке уехать вбок'],
     ['U-ложе с губой','Держит нижний угол устройства. Губа 15 мм спереди закрывает только рамку экрана'],
     ['Накладки TPU','В ложе и на стойке: не царапают устройство и гасят вибрацию'],
-    ['Устройство с табло','Любой телефон или планшет 6–13″, держалки разводятся под его ширину']],
+    ['Устройство с табло','На модели iPhone 16 Pro Max или iPad Air 11″. Подойдёт любой телефон или планшет 6–13″']],
   clip:[
     ['Корпус Clip','Одна литая деталь в форме «пилюли»: ложемент, рамка экрана и крепления внутри. Поликарбонат или ASA'],
     ['Язычок','Пружинная сталь 25 × 1,5 мм. Заходит в любую ячейку сверху, ложится на проволоку и держит вес'],
     ['Магнитная полоса','5 неодимовых магнитов в TPU с V-образными накладками под пруток. Прижимает корпус и гасит вибрацию'],
     ['Петля под тросик','Встроена в корпус снизу. Для клубов, где табло висит постоянно'],
-    ['Устройство с табло','Вставляется снизу до щелчка. Режим табло: экран не гаснет, крупные цифры']],
+    ['Устройство с табло','На модели iPhone 16 Pro Max. Вставляется снизу до щелчка, экран не гаснет']],
   mesh:[
     ['Рамка-ложемент','Держит устройство по периметру, окно под экран. PETG или ASA, не плывёт на солнце'],
     ['Верхние крюки ×2','Сталь Ø3 мм в ПВХ. Лежат на горизонтальной проволоке и несут вес'],
     ['Нижняя защёлка','На пружине, цепляет проволоку снизу. Рамка не подпрыгивает от удара мяча'],
     ['Демпферы ×4','Резина или TPU 3 мм между рамкой и сеткой. Гасят вибрацию'],
     ['Страховочный тросик','Трос 1,5 мм в оплётке с карабином. Если рамку сбили, она не упадёт'],
-    ['Устройство с табло','Режим табло: экран не гаснет, максимум яркости, крупные цифры']],
+    ['Устройство с табло','На модели iPhone 16 Pro Max. Режим табло: экран не гаснет, максимум яркости']],
   glass:[
     ['Рамка-ложемент','Та же рамка, что и для сетки, без крюков. Экран смотрит на корт сквозь стекло'],
     ['Вакуумные присоски ×2','С ручной помпой и красным индикатором: видно, когда вакуум ослаб'],
     ['Траверса','Алюминиевый профиль между присосками, рамка крепится к нему по центру'],
     ['Светоуплотнитель','Кольцо из EPDM вокруг экрана прижато к стеклу и убирает блики между экраном и стеклом'],
     ['Страховочный тросик','К стойке или прижиму стекла. Если присоска отойдёт, крепление повиснет'],
-    ['Устройство с табло','Режим табло, плюс датчик наклона: приложение предупредит, если крепление съехало']]
+    ['Устройство с табло','На модели iPhone 16 Pro Max. Датчик наклона предупредит, если крепление съехало']]
 };
 const STEPS={
   duo:[
@@ -834,6 +834,47 @@ function rounded(path,rad){
   }
   out.push(path[path.length-1]); return out;
 }
+function remapUV(geo,sw,sh){ const pos=geo.attributes.position, uv=geo.attributes.uv; for(let i=0;i<pos.count;i++) uv.setXY(i,(pos.getX(i)+sw/2)/sw,(pos.getY(i)+sh/2)/sh); uv.needsUpdate=true; }
+/* iPhone 16 Pro Max / iPad Air 11" proportions, landscape, screen facing +z. No logos. */
+function makeIPhone(tab,cx,cy,front){
+  const w=tab?24.76:16.3, h=tab?17.85:7.76, d=tab?.61:.825, r=tab?1.8:1.35;
+  const g=new THREE.Group();
+  const frameM=new THREE.MeshStandardMaterial({color:tab?0x6E7378:0x8C8A84,metalness:.85,roughness:.32});
+  const backM=new THREE.MeshStandardMaterial({color:tab?0x5D6166:0x3A3936,roughness:.6,metalness:.1});
+  const blackM=new THREE.MeshStandardMaterial({color:0x050608,roughness:.08,metalness:.2});
+  const bev=.05, depth=Math.max(.1,d-2*bev);
+  const body=new THREE.Mesh(new THREE.ExtrudeGeometry(roundedShape(w,h,r),{depth,bevelEnabled:true,bevelThickness:bev,bevelSize:bev*.6,bevelSegments:3,curveSegments:28}),frameM);
+  body.position.set(cx,cy,front-depth-bev); g.add(body);
+  const back=new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(w-.1,h-.1,r-.05),28),backM); back.position.set(cx,cy,front-d-.004); back.rotation.y=Math.PI; g.add(back);
+  const fg=new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(w-.08,h-.08,r-.04),28),blackM); fg.position.set(cx,cy,front+.004); g.add(fg);
+  const bz=tab?.62:.2, sw=w-2*bz, sh=h-2*bz;
+  const sg=new THREE.ShapeGeometry(roundedShape(sw,sh,Math.max(.3,r-bz)),28); remapUV(sg,sw,sh);
+  if(!screenTex){ screenTex=new THREE.CanvasTexture(scr); screenTex.anisotropy=4; }
+  drawScreen();
+  const screen=new THREE.Mesh(sg,new THREE.MeshBasicMaterial({map:screenTex})); screen.position.set(cx,cy,front+.008); g.add(screen);
+  const ink=new THREE.MeshBasicMaterial({color:0x000000});
+  if(!tab){
+    const isl=new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(.36,1.26,.18),16),ink); isl.position.set(cx-w/2+bz+.55,cy,front+.012); g.add(isl);
+    const plat=new THREE.Mesh(new THREE.ExtrudeGeometry(roundedShape(3.8,3.8,.9),{depth:.1,bevelEnabled:true,bevelThickness:.03,bevelSize:.03,bevelSegments:2,curveSegments:20}),backM);
+    const px=cx-w/2+2.3, py=cy+h/2-2.3; plat.position.set(px,py,front-d-.14); g.add(plat);
+    const lensM=new THREE.MeshStandardMaterial({color:0x111214,roughness:.15,metalness:.6}), ringM=frameM;
+    [[-.88,.88],[-.88,-.88],[.88,0]].forEach(([ox,oy])=>{
+      const ring=new THREE.Mesh(new THREE.CylinderGeometry(.68,.68,.2,32),ringM); ring.rotation.x=Math.PI/2; ring.position.set(px+ox,py+oy,front-d-.27); g.add(ring);
+      const lens=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.06,32),lensM); lens.rotation.x=Math.PI/2; lens.position.set(px+ox,py+oy,front-d-.38); g.add(lens);
+    });
+    const flash=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.05,20),new THREE.MeshStandardMaterial({color:0xE8E2C8,roughness:.4})); flash.rotation.x=Math.PI/2; flash.position.set(px+.88,py+1.2,front-d-.2); g.add(flash);
+    [[-3.6,1.5],[-1.6,1.5]].forEach(([ox,len])=>{ const b=new THREE.Mesh(new THREE.BoxGeometry(len,.08,.3),frameM); b.position.set(cx+ox,cy-h/2-.03,front-d/2); g.add(b); });
+    const pw=new THREE.Mesh(new THREE.BoxGeometry(2.2,.08,.3),frameM); pw.position.set(cx-1.8,cy+h/2+.03,front-d/2); g.add(pw);
+    const cam=new THREE.Mesh(new THREE.BoxGeometry(1.4,.07,.32),new THREE.MeshStandardMaterial({color:0x9A968E,metalness:.9,roughness:.25})); cam.position.set(cx+3.2,cy+h/2+.03,front-d/2); g.add(cam);
+  } else {
+    const fc=new THREE.Mesh(new THREE.CircleGeometry(.11,16),new THREE.MeshBasicMaterial({color:0x1b1e22})); fc.position.set(cx,cy+h/2-bz/2,front+.012); g.add(fc);
+    const lensM=new THREE.MeshStandardMaterial({color:0x111214,roughness:.15,metalness:.6});
+    const ring=new THREE.Mesh(new THREE.CylinderGeometry(.62,.62,.12,32),frameM); ring.rotation.x=Math.PI/2; ring.position.set(cx-w/2+1.5,cy+h/2-1.5,front-d-.06); g.add(ring);
+    const lens=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,.04,32),lensM); lens.rotation.x=Math.PI/2; lens.position.set(cx-w/2+1.5,cy+h/2-1.5,front-d-.13); g.add(lens);
+    const pw=new THREE.Mesh(new THREE.BoxGeometry(1.6,.08,.25),frameM); pw.position.set(cx-w/2+3,cy+h/2+.03,front-d/2); g.add(pw);
+  }
+  return {group:g,sw,sh,w,h,d};
+}
 function makeFrame(W,H,D,cy,zc,withHinge){
   const frame=new THREE.Group(), top=cy+H/2, bot=cy-H/2, rimT=.9, lip=.9;
   const back=new THREE.Mesh(new THREE.BoxGeometry(W,H,.5),M.frame); back.position.set(0,cy,zc-D/2+.25); frame.add(back);
@@ -846,15 +887,8 @@ function makeFrame(W,H,D,cy,zc,withHinge){
   return {frame,rimT};
 }
 function makeDevice(W,H,rimT,cy,zc,tab){
-  const dW=W-2*rimT-.2, dH=H-2*rimT-.2, dD=tab?.7:.9;
-  const device=new THREE.Group();
-  const bodyM=new THREE.Mesh(new THREE.BoxGeometry(dW,dH,dD),M.body); bodyM.position.set(0,cy,zc+.1); device.add(bodyM);
-  if(!screenTex){ screenTex=new THREE.CanvasTexture(scr); screenTex.anisotropy=4; }
-  drawScreen();
-  const sw=dW-.6, sh=Math.min(dH-.6,sw/2);
-  const screen=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),new THREE.MeshBasicMaterial({map:screenTex}));
-  screen.position.set(0,cy,zc+.1+dD/2+.01); device.add(screen);
-  return {device,sw,sh,front:zc+.1+dD/2};
+  const front=zc+.55, ph=makeIPhone(tab,0,cy,front);
+  return {device:ph.group,sw:ph.sw,sh:ph.sh,front};
 }
 
 let mount=null, parts={}, anchors=[];
@@ -915,18 +949,14 @@ function strip(group,mat,pts,w,t){
 }
 function buildDuo(){
   const tab=dev==='tab';
-  const dW=tab?25:16.3, dH=tab?17.8:7.7, dD=tab?.75:.95, by=tab?-11:-5;
+  const dW=tab?24.76:16.3, dH=tab?17.85:7.76, dD=tab?.61:.825, by=tab?-11:-5;
   const lipT=.25, front=-.63-lipT-.08, back=front-dD, zs=back-.2, ztop=.45;
   const top=by+dH, wy=Math.ceil((top+1.2)/5)*5, yb=by-.25;
   const steel=new THREE.MeshStandardMaterial({color:0x56636F,roughness:.35,metalness:.75});
   const padM=M.rubber;
   /* device */
   const device=new THREE.Group(); parts.device=device; mount.add(device);
-  const body=new THREE.Mesh(new THREE.BoxGeometry(dW,dH,dD),M.body); body.position.set(0,by+dH/2,front-dD/2); device.add(body);
-  if(!screenTex){ screenTex=new THREE.CanvasTexture(scr); screenTex.anisotropy=4; }
-  drawScreen();
-  const sw=dW-.5, sh=Math.min(dH-.5,sw/2);
-  const screen=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),new THREE.MeshBasicMaterial({map:screenTex})); screen.position.set(0,by+dH/2,front+.01); device.add(screen);
+  const ph=makeIPhone(tab,0,by+dH/2,front); device.add(ph.group); const sw=ph.sw, sh=ph.sh;
   /* two identical holders, hooks centred in mesh cells */
   const want=dW/2-1.2, hx=Math.max(2.5,Math.round((want-2.5)/5)*5+2.5);
   const holders=new THREE.Group(); parts.holders=holders; mount.add(holders);
@@ -960,11 +990,7 @@ function buildClip(){
   const accent=new THREE.Mesh(new THREE.BoxGeometry(W*.28,.18,.06),M.latch); accent.position.set(0,bot+.55,front+.03); shell.add(accent);
   /* device */
   const device=new THREE.Group(); parts.device=device; mount.add(device);
-  const dD=tab?.7:.85, body=new THREE.Mesh(new THREE.BoxGeometry(hw+.6,hh+.6,dD),M.body); body.position.set(0,cy,front-.25-dD/2); device.add(body);
-  if(!screenTex){ screenTex=new THREE.CanvasTexture(scr); screenTex.anisotropy=4; }
-  drawScreen();
-  const sw=hw-.3, sh=Math.min(hh-.3,sw/2);
-  const screen=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),new THREE.MeshBasicMaterial({map:screenTex})); screen.position.set(0,cy,front-.25+.01); device.add(screen);
+  const ph=makeIPhone(tab,0,cy,front-.22); device.add(ph.group); const sw=ph.sw, sh=ph.sh;
   /* spring-steel tongue: up out of the back, over one horizontal wire */
   const tongue=new THREE.Group(); parts.tongue=tongue; mount.add(tongue);
   const wireTop=Math.ceil((top+0.3)/5)*5, ty=wireTop+.3, tw=tab?3.5:2.5, tz=z0+.15;
