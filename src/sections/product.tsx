@@ -62,7 +62,14 @@ export function Product() {
             "Форматы: классическое «больше-меньше» и золотое очко",
             "Ввод проверяем в реальной игре, когда в руке ракетка",
           ]}
-          extra={<p className="text-[14.5px]">Попробуйте сами: нажимайте кнопки команд в демо.</p>}
+          extra={
+            <div className="grid gap-2">
+              <p className="text-[14.5px]">Попробуйте сами: нажимайте кнопки команд в демо.</p>
+              <a href={`${import.meta.env.BASE_URL}mount/`} className="text-brand w-fit text-[15px] font-semibold underline-offset-4 hover:underline">
+                Как табло крепится на сетку корта →
+              </a>
+            </div>
+          }
           label="Работает"
           demo={<Scoreboard />}
         />

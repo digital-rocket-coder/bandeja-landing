@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Крепление табло Bandeja</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: engineering sheet — a live 3D model up top, then a dimensioned drawing, then the court plan; Bandeja brand tokens */
+:root{
+  --bg:#EEF2F5; --surface:#FFFFFF; --ink:#0A1F2E; --muted:#526472; --line:#CBD6DF; --soft:#E2EAF1;
+  --brand:#1D5BA3; --brand-ink:#FFFFFF; --ball:#F1C823; --ball-ink:#1A1600; --court:#1E5AA0; --ok:#1F8A5B;
+  --steel:#4B5864; --part:#E7ECF0; --dim:#C8372D;
+  --f-display:"Unbounded","Onest",system-ui,sans-serif;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#071521; --surface:#0D2131; --ink:#E8F0F6; --muted:#90A5B5; --line:#1D3A50; --soft:#11293C;
+  --brand:#5C9BE6; --brand-ink:#071521; --court:#164A86; --ok:#4CC18B; --steel:#9AAAB8; --part:#2A4258; --dim:#F07A6E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#071521; --surface:#0D2131; --ink:#E8F0F6; --muted:#90A5B5; --line:#1D3A50; --soft:#11293C;
+  --brand:#5C9BE6; --brand-ink:#071521; --court:#164A86; --ok:#4CC18B; --steel:#9AAAB8; --part:#2A4258; --dim:#F07A6E; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+section{padding-block:clamp(36px,6vw,72px)}
+section+section{border-top:1px solid var(--line)}
+.head{display:grid;gap:12px;max-width:760px;margin-bottom:28px}
+.head h2{font-size:clamp(24px,3.4vw,36px);font-weight:600;line-height:1.1}
+.head p{color:var(--muted);max-width:64ch}
+:focus-visible{outline:3px solid var(--ball);outline-offset:2px;border-radius:6px}
+
+.hero{padding-block:clamp(28px,5vw,56px) 8px}
+.hero h1{font-size:clamp(30px,4.6vw,56px);line-height:1.05;font-weight:700;margin-top:14px}
+.hero p{color:var(--muted);font-size:clamp(16.5px,1.6vw,19px);max-width:62ch;margin-top:16px}
+.specs{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.spec{font-family:var(--f-mono);font-size:12.5px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.spec b{color:var(--brand);font-weight:600}
+
+.viewer{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+@media (max-width:920px){.viewer{grid-template-columns:1fr}}
+.stage{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--surface);aspect-ratio:16/11;max-width:100%;touch-action:none}
+.stage canvas{display:block;width:100%;height:100%}
+.hot{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:var(--ball);color:var(--ball-ink);font:600 12.5px/26px var(--f-mono);text-align:center;border:2px solid var(--surface);box-shadow:0 4px 12px -4px rgba(0,0,0,.4);cursor:pointer;padding:0;transition:transform .15s}
+.hot:hover,.hot.on{transform:translate(-50%,-50%) scale(1.18)}
+.stage-tag{position:absolute;left:12px;top:12px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted);letter-spacing:.06em;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 10px;max-width:calc(100% - 24px)}
+.stage-tag b{color:var(--ink)}
+.hint{position:absolute;right:12px;bottom:12px;font-size:12.5px;color:var(--muted);pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+@media (max-width:560px){.hint{display:none}}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:14px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.seg button{all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button:focus-visible{outline:3px solid var(--ball)}
+.tlabel{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:6px}
+.btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;font-weight:500}
+.btn:hover{border-color:var(--brand)}
+.btn:focus-visible{outline:3px solid var(--ball)}
+.btn i{width:14px;height:14px;border-radius:50%;background:var(--ball);display:block}
+.btn.blue i{background:var(--brand)}
+
+.parts{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.part{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);width:100%}
+.part:hover,.part.on{border-color:var(--brand)}
+.part:focus-visible{outline:3px solid var(--ball)}
+.part .n{width:26px;height:26px;border-radius:50%;background:var(--ball);color:var(--ball-ink);font:600 12.5px/26px var(--f-mono);text-align:center}
+.part b{display:block;font-size:15px;font-weight:600}
+.part span{display:block;font-size:13.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+
+.sheet{border:1px solid var(--line);border-radius:20px;background:var(--surface);padding:clamp(14px,2.4vw,26px);overflow-x:auto}
+.sheet svg{display:block;width:100%;min-width:640px;height:auto}
+.sheet text{font-family:var(--f-mono)}
+.sheet-foot{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:14px;font-size:13.5px;color:var(--muted)}
+.sheet-foot b{color:var(--ink);font-weight:600}
+
+.dims{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:22px}
+.dims-wrap{overflow-x:auto}
+.dims th,.dims td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.dims th{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dims td{font-variant-numeric:tabular-nums}
+.dims td:first-child{white-space:normal;min-width:180px}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;counter-reset:s}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:8px;align-content:start;min-width:0}
+.steps li::before{content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--bg);font:600 14px/30px var(--f-mono);text-align:center}
+.steps b{font-size:16px}
+.steps span{font-size:14.5px;color:var(--muted)}
+
+.plan{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px;align-items:start}
+@media (max-width:920px){.plan{grid-template-columns:1fr}}
+.plan .sheet svg{min-width:0}
+.cov{display:grid;gap:14px}
+.cov .big{font-family:var(--f-display);font-size:44px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.cov .lbl{font-size:14px;color:var(--muted)}
+.cov .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px}
+.pos{display:grid;gap:6px;font-size:14px}
+.pos div{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:6px}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--dim);font-weight:600}
+.note{font-size:13.5px;color:var(--muted)}
+
+.checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.checks{grid-template-columns:1fr}}
+.check{border-top:3px solid var(--ball);padding-top:14px;display:grid;gap:6px}
+.check b{font-size:16.5px}
+.check span{color:var(--muted);font-size:14.5px}
+footer{padding-block:28px 40px;font-size:13px;color:var(--muted)}
+footer a{color:inherit}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Bandeja · аксессуар для корта · концепт v0.1</div>
+    <h1>Крепление табло на сетку корта</h1>
+    <p>Рамка для телефона или планшета вешается снаружи корта на металлическую сетку боковой стены. Экран смотрит на игроков через ячейку сетки, крепится за 10 секунд без инструментов и не мешает игре.</p>
+    <div class="specs">
+      <span class="spec">сетка FIP: ячейка <b>5–7 см</b>, проволока <b>2–4 мм</b></span>
+      <span class="spec">высота подвеса <b>1,6–1,8 м</b></span>
+      <span class="spec">наклон ложемента <b>0–15°</b></span>
+      <span class="spec">в корт выступает <b>10 мм</b></span>
+    </div>
+  </header>
+</div>
+
+<section id="model">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">3D-модель</div>
+      <h2>Как крепление сидит на сетке</h2>
+      <p>Крутите модель мышью или пальцем. Номера на модели совпадают со списком деталей. Режим «Разнесено» показывает, из чего собрано крепление.</p>
+    </div>
+    <div class="viewer">
+      <div>
+        <div class="stage" id="stage">
+          <canvas id="three" aria-label="3D-модель крепления на сетке корта"></canvas>
+          <div class="stage-tag" id="stageTag"><b>ВИД С КОРТА</b> · сетка между игроком и экраном</div>
+          <div class="hint">Тяните, чтобы вращать · колесо или щипок для масштаба</div>
+        </div>
+        <div class="toolbar">
+          <div><span class="tlabel">Устройство</span>
+            <div class="seg" role="group" aria-label="Устройство">
+              <button type="button" id="devPhone" aria-pressed="true">Телефон 6,7″</button>
+              <button type="button" id="devTab" aria-pressed="false">Планшет 11″</button>
+            </div></div>
+          <div><span class="tlabel">Сборка</span>
+            <div class="seg" role="group" aria-label="Сборка">
+              <button type="button" id="asm" aria-pressed="true">Собрано</button>
+              <button type="button" id="expl" aria-pressed="false">Разнесено</button>
+            </div></div>
+          <div><span class="tlabel">Вид</span>
+            <div class="seg" role="group" aria-label="Ракурс">
+              <button type="button" data-view="court" aria-pressed="true">С корта</button>
+              <button type="button" data-view="side" aria-pressed="false">Сбоку</button>
+              <button type="button" data-view="back" aria-pressed="false">Снаружи</button>
+            </div></div>
+        </div>
+        <div class="toolbar">
+          <span class="tlabel">Табло на экране</span>
+          <button class="btn blue" type="button" id="ptA"><i></i>Очко синим</button>
+          <button class="btn" type="button" id="ptB"><i></i>Очко жёлтым</button>
+        </div>
+      </div>
+      <ul class="parts" id="parts">
+        <li><button class="part" type="button" data-p="0"><span class="n">1</span><span><b>Рамка-ложемент</b><span>Держит устройство по периметру, окно под экран. PETG или ASA, не плывёт на солнце</span></span></button></li>
+        <li><button class="part" type="button" data-p="1"><span class="n">2</span><span><b>Верхние крюки ×2</b><span>Сталь Ø3 мм в ПВХ. Лежат на горизонтальной проволоке и несут вес</span></span></button></li>
+        <li><button class="part" type="button" data-p="2"><span class="n">3</span><span><b>Нижняя защёлка</b><span>На пружине, цепляет проволоку снизу. Рамка не подпрыгивает от удара мяча</span></span></button></li>
+        <li><button class="part" type="button" data-p="3"><span class="n">4</span><span><b>Демпферы ×4</b><span>Резина или TPU 3 мм между рамкой и сеткой. Гасят вибрацию</span></span></button></li>
+        <li><button class="part" type="button" data-p="4"><span class="n">5</span><span><b>Страховочный тросик</b><span>Трос 1,5 мм в оплётке с карабином. Если рамку сбили, она не упадёт</span></span></button></li>
+        <li><button class="part" type="button" data-p="5"><span class="n">6</span><span><b>Устройство с табло</b><span>Режим табло: экран не гаснет, максимум яркости, крупные цифры</span></span></button></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="drawing">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Чертёж · версия для телефона</div>
+      <h2>Вид с корта и разрез сбоку</h2>
+      <p>Размеры в миллиметрах. Защёлка ездит по вертикали, поэтому одно крепление подходит под разный шаг сетки.</p>
+    </div>
+    <div class="sheet">
+      <svg viewBox="0 0 820 430" role="img" aria-label="Чертёж крепления: вид с корта и разрез сбоку с размерами">
+        <defs>
+          <marker id="dA" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" fill="var(--dim)"/></marker>
+        </defs>
+        <text x="40" y="28" font-size="12" fill="var(--muted)" letter-spacing="1.2">ВИД С КОРТА</text>
+        <text x="500" y="28" font-size="12" fill="var(--muted)" letter-spacing="1.2">РАЗРЕЗ СБОКУ</text>
+
+        <g stroke="var(--line)" stroke-width="2">
+          <line x1="80" y1="40" x2="80" y2="400"/><line x1="155" y1="40" x2="155" y2="400"/><line x1="230" y1="40" x2="230" y2="400"/><line x1="305" y1="40" x2="305" y2="400"/><line x1="380" y1="40" x2="380" y2="400"/>
+          <line x1="50" y1="45" x2="410" y2="45"/><line x1="50" y1="120" x2="410" y2="120"/><line x1="50" y1="195" x2="410" y2="195"/><line x1="50" y1="270" x2="410" y2="270"/><line x1="50" y1="345" x2="410" y2="345"/>
+        </g>
+        <rect x="90.5" y="136.5" width="279" height="147" rx="10" fill="var(--part)" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="110" y="154.5" width="240" height="111" rx="6" fill="#0B1B28" stroke="var(--ink)" stroke-width="1"/>
+        <text x="175" y="222" font-size="30" font-weight="600" fill="#F1C823" text-anchor="middle">40</text>
+        <text x="285" y="222" font-size="30" font-weight="600" fill="#F1C823" text-anchor="middle">30</text>
+        <text x="230" y="248" font-size="11" fill="#9FB3C3" text-anchor="middle">ГЕЙМЫ 3 : 2</text>
+        <rect x="137" y="110" width="6" height="32" rx="3" fill="var(--steel)"/>
+        <rect x="317" y="110" width="6" height="32" rx="3" fill="var(--steel)"/>
+        <rect x="226" y="278" width="8" height="76" rx="3" fill="var(--ball)" stroke="var(--ink)" stroke-width="1"/>
+        <g fill="var(--ink)" font-size="12"><circle cx="140" cy="100" r="9" fill="var(--ball)"/><text x="140" y="104" text-anchor="middle" fill="#1A1600" font-weight="600">2</text>
+          <circle cx="247" cy="330" r="9" fill="var(--ball)"/><text x="247" y="334" text-anchor="middle" fill="#1A1600" font-weight="600">3</text>
+          <circle cx="104" cy="150" r="9" fill="var(--ball)"/><text x="104" y="154" text-anchor="middle" fill="#1A1600" font-weight="600">1</text></g>
+
+        <g stroke="var(--dim)" stroke-width="1" fill="none">
+          <line x1="90.5" y1="290" x2="90.5" y2="392"/><line x1="369.5" y1="290" x2="369.5" y2="392"/>
+          <line x1="90.5" y1="384" x2="369.5" y2="384" marker-start="url(#dA)" marker-end="url(#dA)"/>
+          <line x1="84" y1="136.5" x2="56" y2="136.5"/><line x1="84" y1="283.5" x2="56" y2="283.5"/>
+          <line x1="62" y1="136.5" x2="62" y2="283.5" marker-start="url(#dA)" marker-end="url(#dA)"/>
+          <line x1="140" y1="106" x2="140" y2="72"/><line x1="320" y1="106" x2="320" y2="72"/>
+          <line x1="140" y1="78" x2="320" y2="78" marker-start="url(#dA)" marker-end="url(#dA)"/>
+          <line x1="372" y1="283.5" x2="402" y2="283.5"/><line x1="240" y1="354" x2="402" y2="354"/>
+          <line x1="396" y1="283.5" x2="396" y2="354" marker-start="url(#dA)" marker-end="url(#dA)"/>
+        </g>
+        <g fill="var(--dim)" font-size="13" font-weight="600">
+          <text x="230" y="378" text-anchor="middle">186</text>
+          <text x="48" y="214" text-anchor="middle">98</text>
+          <text x="230" y="72" text-anchor="middle">120</text>
+          <text x="404" y="314">30–60</text>
+        </g>
+
+        <g stroke="var(--line)" stroke-width="2"><line x1="643" y1="40" x2="643" y2="400"/></g>
+        <g fill="var(--steel)"><circle cx="638" cy="45" r="4"/><circle cx="638" cy="120" r="4"/><circle cx="638" cy="195" r="4"/><circle cx="638" cy="270" r="4"/><circle cx="638" cy="345" r="4"/></g>
+        <text x="560" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">КОРТ</text>
+        <text x="740" y="60" font-size="12" fill="var(--muted)" text-anchor="middle">СНАРУЖИ</text>
+        <rect x="646" y="160" width="5" height="18" rx="2" fill="var(--steel)"/>
+        <rect x="646" y="242" width="5" height="18" rx="2" fill="var(--steel)"/>
+        <rect x="651" y="136.5" width="33" height="147" rx="6" fill="var(--part)" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="655" y="151" width="15" height="118" rx="3" fill="#0B1B28"/>
+        <rect x="652.5" y="158" width="3" height="104" fill="#F1C823"/>
+        <path d="M679 136.5 V114 H624 V134" fill="none" stroke="var(--steel)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M679 283.5 V353 H624 V336" fill="none" stroke="var(--ink)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M679 283.5 V353" fill="none" stroke="var(--ball)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M684 300 q8 -6 16 0 q8 6 16 0 q8 -6 16 0" fill="none" stroke="var(--ball)" stroke-width="2.5"/>
+        <path d="M684 230 C730 240 720 300 660 380 L643 382" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <g fill="var(--ink)" font-size="12"><circle cx="736" cy="300" r="9" fill="var(--ball)"/><text x="736" y="304" text-anchor="middle" fill="#1A1600" font-weight="600">3</text>
+          <circle cx="634" cy="214" r="9" fill="var(--ball)"/><text x="634" y="218" text-anchor="middle" fill="#1A1600" font-weight="600">4</text>
+          <circle cx="722" cy="262" r="9" fill="var(--ball)"/><text x="722" y="266" text-anchor="middle" fill="#1A1600" font-weight="600">5</text>
+          <circle cx="697" cy="124" r="9" fill="var(--ball)"/><text x="697" y="128" text-anchor="middle" fill="#1A1600" font-weight="600">2</text></g>
+        <g stroke="var(--dim)" stroke-width="1" fill="none">
+          <line x1="651" y1="132" x2="651" y2="96"/><line x1="684" y1="130" x2="684" y2="96"/>
+          <line x1="651" y1="102" x2="684" y2="102" marker-start="url(#dA)" marker-end="url(#dA)"/>
+          <line x1="624" y1="362" x2="624" y2="396"/><line x1="643" y1="362" x2="643" y2="396"/>
+          <line x1="600" y1="390" x2="624" y2="390" marker-end="url(#dA)"/><line x1="667" y1="390" x2="643" y2="390" marker-end="url(#dA)"/>
+        </g>
+        <g fill="var(--dim)" font-size="13" font-weight="600">
+          <text x="667" y="92" text-anchor="middle">22</text>
+          <text x="560" y="394" text-anchor="middle">10 в корт</text>
+        </g>
+        <text x="760" y="200" font-size="12" fill="var(--muted)">экран</text>
+        <text x="760" y="216" font-size="12" fill="var(--muted)">к корту</text>
+        <line x1="756" y1="206" x2="672" y2="206" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>
+      </svg>
+    </div>
+    <div class="sheet-foot">
+      <span><b>Масштаб</b> 1 : 0,67 (1 мм = 1,5 px)</span>
+      <span><b>Ложемент</b> внутри 172 × 84 × 12 мм, под телефон до 6,9″ в чехле</span>
+      <span><b>Цвет детали</b> красным — размеры, жёлтым — подвижные части</span>
+    </div>
+    <div class="dims-wrap">
+      <table class="dims">
+        <thead><tr><th>Параметр</th><th>Телефон 6,7″</th><th>Планшет 11″</th></tr></thead>
+        <tbody>
+          <tr><td>Габарит рамки, мм</td><td>186 × 98 × 22</td><td>274 × 199 × 22</td></tr>
+          <tr><td>Ложемент под устройство, мм</td><td>172 × 84 × 12</td><td>260 × 185 × 12</td></tr>
+          <tr><td>Расстояние между крюками, мм</td><td>120</td><td>200</td></tr>
+          <tr><td>Ход защёлки под шаг сетки, мм</td><td>30–60</td><td>30–60</td></tr>
+          <tr><td>Высота цифр на экране, см</td><td>≈ 4</td><td>≈ 9</td></tr>
+          <tr><td>Счёт читается с расстояния, м</td><td>≈ 5</td><td>≈ 11</td></tr>
+          <tr><td>Масса крепления без устройства, г</td><td>≈ 120</td><td>≈ 220</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Установка</div>
+      <h2>Повесить за 10 секунд, без инструментов</h2>
+    </div>
+    <ol class="steps">
+      <li><b>Завести крюки</b><span>Снаружи корта просуньте оба крюка в ячейку над рамкой и положите их на горизонтальную проволоку.</span></li>
+      <li><b>Опустить до щелчка</b><span>Рамка опускается под весом. Защёлка проскакивает под нижнюю проволоку и запирает крепление.</span></li>
+      <li><b>Пристегнуть тросик</b><span>Карабин цепляется за вертикальную проволоку рядом. Если рамку собьют, она повиснет на тросике.</span></li>
+      <li><b>Вставить устройство</b><span>Телефон экраном к корту, режим табло в приложении. Наклон ложемента подбирается против бликов.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Схема корта · откуда виден счёт</div>
+      <h2>Куда вешать и что выбрать: телефон или планшет</h2>
+      <p>Зона показывает, с какого расстояния читаются цифры на экране. Ориентир для расчёта: цифры высотой 1 см читаются примерно с 1,2 м.</p>
+    </div>
+    <div class="plan">
+      <div>
+        <div class="sheet" style="overflow:visible">
+          <svg id="court" viewBox="0 0 720 420" role="img" aria-label="Корт 20 на 10 метров сверху с местом крепления и зоной, откуда читается счёт"></svg>
+        </div>
+        <div class="toolbar">
+          <div><span class="tlabel">Устройство</span>
+            <div class="seg" role="group" aria-label="Устройство на схеме">
+              <button type="button" id="cPhone" aria-pressed="true">Телефон</button>
+              <button type="button" id="cTab" aria-pressed="false">Планшет</button>
+            </div></div>
+          <div><span class="tlabel">Сколько табло</span>
+            <div class="seg" role="group" aria-label="Количество табло">
+              <button type="button" id="cOne" aria-pressed="true">Одно у сетки</button>
+              <button type="button" id="cTwo" aria-pressed="false">Два, по одному на половину</button>
+            </div></div>
+        </div>
+      </div>
+      <div class="cov">
+        <div class="card">
+          <div class="lbl">Часть корта, откуда читается счёт</div>
+          <div class="big" id="covPct">—</div>
+          <div class="pos" id="covPos"></div>
+        </div>
+        <p class="note">Позиции игроков условные: у задней стенки около 2 м от стекла, у сетки около 3 м от неё. Если смотреть на экран под острым углом через сетку, проволока закрывает больше цифр. Реальную дальность проверим на пилоте.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pilot">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Что проверить на пилоте</div>
+      <h2>Три вопроса до заказа деталей</h2>
+    </div>
+    <div class="checks">
+      <div class="check"><b>Видно ли счёт</b><span>Сыграть 3–4 матча с телефоном и с планшетом, спросить игроков, откуда они видели счёт. Начать можно с готового держателя для сетчатого забора.</span></div>
+      <div class="check"><b>Держит ли удары</b><span>Сделать серию сильных ударов мячом в сетку рядом с рамкой и проверить, не сползает ли защёлка и не выпадает ли устройство.</span></div>
+      <div class="check"><b>Хватает ли батареи и экрана</b><span>Полтора часа на полной яркости, на улице днём. Если телефон греется и тускнеет, нужен козырёк, повербанк или планшет.</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Размеры сетки по регламенту FIP: <a href="https://padel-rules.pages.dev/court-dimensions/side-wall-configuration" target="_blank" rel="noopener">Side Wall Configuration</a>, <a href="https://www.padelfip.com/wp-content/uploads/2025/12/FIP_Rules-of-Padel.pdf" target="_blank" rel="noopener">FIP Rules of Padel</a>. Остальные размеры — концепт для прототипа, уточняются после печати.</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(()=>{
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- score shown on the device screen ---------- */
+const PT=['0','15','30','40'];
+const score={p:[3,2],g:[3,2]};
+function addPoint(i){
+  const o=1-i; score.p[i]++;
+  const p=score.p[i], q=score.p[o];
+  if(p>=4 && p-q>=2){ score.g[i]++; score.p=[0,0]; if(score.g[i]>=6&&score.g[i]-score.g[o]>=2) score.g=[0,0]; }
+  drawScreen();
+}
+function lbl(i){const p=score.p[i],q=score.p[1-i]; if(p>=3&&q>=3) return p===q?'40':(p>q?'AD':'40'); return PT[Math.min(p,3)];}
+const scr=document.createElement('canvas'); scr.width=1024; scr.height=512;
+function drawScreen(){
+  const c=scr.getContext('2d'), W=scr.width, H=scr.height, tab=dev==='tab';
+  c.fillStyle='#0B1B28'; c.fillRect(0,0,W,H);
+  c.fillStyle='#1D5BA3'; c.fillRect(0,0,W/2,18); c.fillStyle='#F1C823'; c.fillRect(W/2,0,W/2,18);
+  c.textAlign='center'; c.textBaseline='middle';
+  c.font='600 44px Onest, sans-serif'; c.fillStyle='#9FB3C3';
+  c.fillText('СИНИЕ',W*0.25,80); c.fillText('ЖЁЛТЫЕ',W*0.75,80);
+  c.font=`700 ${tab?250:230}px "JetBrains Mono", monospace`; c.fillStyle='#FFFFFF';
+  c.fillText(lbl(0),W*0.25,260); c.fillText(lbl(1),W*0.75,260);
+  c.fillStyle='rgba(255,255,255,.25)'; c.fillRect(W/2-2,120,4,260);
+  c.font='600 48px "JetBrains Mono", monospace'; c.fillStyle='#F1C823';
+  c.fillText(`ГЕЙМЫ  ${score.g[0]} : ${score.g[1]}`,W/2,440);
+  if(screenTex) screenTex.needsUpdate=true;
+}
+
+/* ---------- 3D scene (units: cm) ---------- */
+const canvas=document.getElementById('three'), stage=document.getElementById('stage');
+let dev='phone', explodeTarget=0, explode=0, screenTex=null;
+if(!window.THREE){ stage.insertAdjacentHTML('beforeend','<p style="position:absolute;inset:0;display:grid;place-items:center;color:var(--muted)">3D-модель не загрузилась. Обновите страницу.</p>'); }
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(32,1.45,1,1000);
+const controls=new THREE.OrbitControls(camera,canvas);
+controls.enableDamping=!RM; controls.dampingFactor=.08; controls.minDistance=25; controls.maxDistance=220; controls.target.set(0,-1,-1.5);
+scene.add(new THREE.HemisphereLight(0xffffff,0x8899aa,.85));
+const sun=new THREE.DirectionalLight(0xffffff,.75); sun.position.set(30,50,40); scene.add(sun);
+const fill=new THREE.DirectionalLight(0xffffff,.35); fill.position.set(-40,10,-30); scene.add(fill);
+
+const M={
+  wire:new THREE.MeshStandardMaterial({color:0x3E4A54,metalness:.55,roughness:.45}),
+  frame:new THREE.MeshStandardMaterial({color:0xE7ECF0,roughness:.6}),
+  frameDark:new THREE.MeshStandardMaterial({color:0x0A1F2E,roughness:.55}),
+  hook:new THREE.MeshStandardMaterial({color:0x2A3540,roughness:.5,metalness:.3}),
+  latch:new THREE.MeshStandardMaterial({color:0xF1C823,roughness:.45}),
+  rubber:new THREE.MeshStandardMaterial({color:0x15191d,roughness:.9}),
+  cable:new THREE.MeshStandardMaterial({color:0x8a97a3,roughness:.5,metalness:.4}),
+  body:new THREE.MeshStandardMaterial({color:0x1b232b,roughness:.4,metalness:.2}),
+};
+/* fence section: horizontals on court side (z=0), verticals behind (z=-0.45) */
+const fence=new THREE.Group(); scene.add(fence);
+(function buildFence(){
+  const span=70, top=30, bot=-34;
+  for(let y=-30;y<=25;y+=5){ const g=new THREE.CylinderGeometry(.18,.18,span,8); const m=new THREE.Mesh(g,M.wire); m.rotation.z=Math.PI/2; m.position.set(0,y,0); fence.add(m); }
+  for(let x=-35;x<=35;x+=5){ const g=new THREE.CylinderGeometry(.18,.18,top-bot,8); const m=new THREE.Mesh(g,M.wire); m.position.set(x,(top+bot)/2,-.45); fence.add(m); }
+  const post=new THREE.Mesh(new THREE.BoxGeometry(5,top-bot+6,5),new THREE.MeshStandardMaterial({color:0x2A3540,roughness:.6})); post.position.set(-38,(top+bot)/2,-.2); fence.add(post);
+})();
+
+const tube=(pts,r,mat)=>new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)),false,'catmullrom',.02),96,r,10,false),mat);
+function rounded(path,rad){ // add small fillets at corners of a polyline
+  const out=[path[0]];
+  for(let i=1;i<path.length-1;i++){
+    const a=new THREE.Vector3(...path[i-1]), b=new THREE.Vector3(...path[i]), c=new THREE.Vector3(...path[i+1]);
+    const p1=b.clone().add(a.clone().sub(b).setLength(Math.min(rad,a.distanceTo(b)/2)));
+    const p2=b.clone().add(c.clone().sub(b).setLength(Math.min(rad,c.distanceTo(b)/2)));
+    out.push(p1.toArray(), b.clone().lerp(p1,.5).lerp(p2,.5).toArray(), p2.toArray());
+  }
+  out.push(path[path.length-1]); return out;
+}
+
+let mount=null, parts={}, anchors=[];
+function build(){
+  if(mount){ scene.remove(mount); mount.traverse(o=>{ if(o.geometry) o.geometry.dispose(); }); }
+  mount=new THREE.Group(); scene.add(mount); parts={};
+  const tab=dev==='tab';
+  const W=tab?27.4:18.6, H=tab?19.9:9.8, D=2.2, cy=tab?-3:-1, zc=-2.0; // frame centre z: front face at -0.9
+  const top=cy+H/2, bot=cy-H/2;
+  const wireTop=Math.ceil((top+0.6)/5)*5, wireBot=Math.floor((bot-3)/5)*5;
+  const hx=tab?10:6;
+
+  /* 1 frame */
+  const frame=new THREE.Group(); parts.frame=frame; mount.add(frame);
+  const back=new THREE.Mesh(new THREE.BoxGeometry(W,H,.5),M.frame); back.position.set(0,cy,zc-D/2+.25); frame.add(back);
+  const rimT=.9, lip=.9;
+  [[0,top-rimT/2,W,rimT],[0,bot+rimT/2,W,rimT],[-W/2+rimT/2,cy,rimT,H],[W/2-rimT/2,cy,rimT,H]].forEach(([x,y,w,h])=>{
+    const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,D),M.frame); m.position.set(x,y,zc); frame.add(m);
+    const l=new THREE.Mesh(new THREE.BoxGeometry(w===W?w:lip+rimT,h===H?h:lip+rimT,.35),M.frameDark);
+    l.position.set(x===0?0:x+(x<0?lip/2:-lip/2),y===cy?cy:y+(y<cy?lip/2:-lip/2),zc+D/2-.17); frame.add(l);
+  });
+  const hinge=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,W*.5,16),M.frameDark); hinge.rotation.z=Math.PI/2; hinge.position.set(0,bot+.6,zc-D/2-.4); frame.add(hinge);
+
+  /* 6 device */
+  const dW=W-2*rimT-.2, dH=H-2*rimT-.2, dD=tab?.7:.9;
+  const device=new THREE.Group(); parts.device=device; mount.add(device);
+  const bodyM=new THREE.Mesh(new THREE.BoxGeometry(dW,dH,dD),M.body); bodyM.position.set(0,cy,zc+.1); device.add(bodyM);
+  screenTex=new THREE.CanvasTexture(scr); screenTex.anisotropy=4; drawScreen();
+  const sw=dW-.6, sh=Math.min(dH-.6,sw/2);
+  const screen=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),new THREE.MeshBasicMaterial({map:screenTex}));
+  screen.position.set(0,cy,zc+.1+dD/2+.01); device.add(screen);
+
+  /* 2 hooks */
+  const hooks=new THREE.Group(); parts.hooks=hooks; mount.add(hooks);
+  const yr=wireTop+.18+.17;
+  [-hx,hx].forEach(x=>{
+    hooks.add(tube(rounded([[x,top-1.2,zc-D/2+.25],[x,yr,zc-D/2+.25],[x,yr,.65],[x,yr-1.4,.65]],.5),.17,M.hook));
+    const cap=new THREE.Mesh(new THREE.SphereGeometry(.24,12,12),M.hook); cap.position.set(x,yr-1.4,.65); hooks.add(cap);
+  });
+
+  /* 3 latch with spring */
+  const latch=new THREE.Group(); parts.latch=latch; mount.add(latch);
+  const yb=wireBot-.18-.17;
+  latch.add(tube(rounded([[0,bot+1,zc-D/2+.25],[0,yb,zc-D/2+.25],[0,yb,.65],[0,yb+1.3,.65]],.5),.19,M.latch));
+  const tabG=new THREE.Mesh(new THREE.BoxGeometry(2.4,.9,.5),M.latch); tabG.position.set(0,(bot+yb)/2,zc-D/2-.1); latch.add(tabG);
+  const helix=[]; for(let i=0;i<=120;i++){ const t=i/120, a=t*Math.PI*2*6; helix.push([Math.cos(a)*.45,bot-.4-t*2.2,zc-D/2+.25+Math.sin(a)*.45]); }
+  latch.add(tube(helix,.07,M.hook));
+
+  /* 4 dampers */
+  const damp=new THREE.Group(); parts.damp=damp; mount.add(damp);
+  [[-W/2+1.6,top-1.6],[W/2-1.6,top-1.6],[-W/2+1.6,bot+1.6],[W/2-1.6,bot+1.6]].forEach(([x,y])=>{
+    const d=new THREE.Mesh(new THREE.CylinderGeometry(.7,.7,.35,20),M.rubber); d.rotation.x=Math.PI/2; d.position.set(x,y,zc+D/2+.12); damp.add(d);
+  });
+
+  /* 5 safety cable to a nearby vertical wire */
+  const cable=new THREE.Group(); parts.cable=cable; mount.add(cable);
+  const vx=Math.ceil((W/2+2)/5)*5;
+  cable.add(tube([[W/2,cy+H*.15,zc-.4],[W/2+2.5,cy-H*.1,zc-1.2],[vx-1,cy-H*.35,-1.2],[vx,cy-H*.3,-.75]],.08,M.cable));
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.1,8,20),M.cable); ring.position.set(vx,cy-H*.3,-.6); ring.rotation.y=Math.PI/2; cable.add(ring);
+
+  anchors=[
+    {g:frame, p:new THREE.Vector3(-W/2+.4,top-.4,zc+D/2)},
+    {g:hooks, p:new THREE.Vector3(hx,yr,.65)},
+    {g:latch, p:new THREE.Vector3(0,yb,.65)},
+    {g:damp,  p:new THREE.Vector3(W/2-1.6,bot+1.6,zc+D/2+.3)},
+    {g:cable, p:new THREE.Vector3(vx,cy-H*.3,-.6)},
+    {g:device,p:new THREE.Vector3(-sw*.18,cy+sh*.18,zc+.1+dD/2)},
+  ];
+  applyExplode();
+}
+function applyExplode(){
+  const e=explode;
+  if(!parts.frame) return;
+  parts.frame.position.set(0,0,-7*e);
+  parts.device.position.set(0,0,-3.2*e);
+  parts.hooks.position.set(0,5*e,-7*e);
+  parts.latch.position.set(0,-5*e,-7*e);
+  parts.damp.position.set(0,0,1.6*e);
+  parts.cable.visible=e<.15;
+}
+const hots=anchors.map(()=>null);
+function makeHots(){
+  stage.querySelectorAll('.hot').forEach(h=>h.remove());
+  anchors.forEach((a,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='hot'; b.textContent=i+1; b.setAttribute('aria-label','Деталь '+(i+1)); b.addEventListener('click',()=>select(i)); stage.appendChild(b); hots[i]=b; });
+}
+let selected=-1;
+const partBtns=[...document.querySelectorAll('.part')];
+function select(i){ selected=selected===i?-1:i; partBtns.forEach((b,j)=>b.classList.toggle('on',j===selected)); hots.forEach((h,j)=>h&&h.classList.toggle('on',j===selected)); }
+partBtns.forEach((b,i)=>b.addEventListener('click',()=>select(i)));
+
+const views={court:[[24,9,40],'<b>ВИД С КОРТА</b> · сетка между игроком и экраном'],side:[[118,4,-3],'<b>ВИД СБОКУ</b> · крюки сверху, защёлка снизу'],back:[[-30,12,-55],'<b>ВИД СНАРУЖИ</b> · тыльная сторона и тросик']};
+let camGoal=null;
+function setView(k){
+  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===k));
+  document.getElementById('stageTag').innerHTML=views[k][1];
+  const s=dev==='tab'?1.35:1; camGoal=new THREE.Vector3(...views[k][0]).multiplyScalar(s);
+  if(RM){ camera.position.copy(camGoal); camGoal=null; }
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+const seg=(on,off)=>{on.setAttribute('aria-pressed','true'); off.setAttribute('aria-pressed','false');};
+const devPhone=document.getElementById('devPhone'), devTab=document.getElementById('devTab');
+devPhone.onclick=()=>{ dev='phone'; seg(devPhone,devTab); build(); makeHots(); const k=document.querySelector('[data-view][aria-pressed="true"]').dataset.view; setView(k); };
+devTab.onclick=()=>{ dev='tab'; seg(devTab,devPhone); build(); makeHots(); const k=document.querySelector('[data-view][aria-pressed="true"]').dataset.view; setView(k); };
+const asm=document.getElementById('asm'), expl=document.getElementById('expl');
+asm.onclick=()=>{ explodeTarget=0; seg(asm,expl); if(RM){explode=0;applyExplode();} };
+expl.onclick=()=>{ explodeTarget=1; seg(expl,asm); if(RM){explode=1;applyExplode();} };
+document.getElementById('ptA').onclick=()=>addPoint(0);
+document.getElementById('ptB').onclick=()=>addPoint(1);
+
+function resize(){ const r=stage.getBoundingClientRect(); renderer.setSize(r.width,r.height,false); camera.aspect=r.width/r.height; camera.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(stage);
+const tmp=new THREE.Vector3();
+function frameLoop(){
+  if(Math.abs(explode-explodeTarget)>.001){ explode+= (explodeTarget-explode)*.12; applyExplode(); }
+  if(camGoal){ camera.position.lerp(camGoal,.1); if(camera.position.distanceTo(camGoal)<.3) camGoal=null; }
+  controls.update();
+  renderer.render(scene,camera);
+  const r=canvas.getBoundingClientRect();
+  anchors.forEach((a,i)=>{ const h=hots[i]; if(!h) return; tmp.copy(a.p).add(a.g.position).project(camera);
+    const vis=a.g.visible!==false && tmp.z<1; h.hidden=!vis;
+    h.style.left=((tmp.x+1)/2*r.width)+'px'; h.style.top=((1-tmp.y)/2*r.height)+'px'; });
+  requestAnimationFrame(frameLoop);
+}
+build(); makeHots(); resize(); camera.position.set(24,9,40); requestAnimationFrame(frameLoop);
+document.fonts && document.fonts.ready.then(drawScreen);
+
+/* ---------- court plan ---------- */
+const svg=document.getElementById('court'), S=32, OX=40, OY=50; // 20 x 10 m
+const P=(x,y)=>[OX+x*S, OY+y*S];
+let cDev='phone', cTwo=false;
+const R={phone:5, tab:11};
+const positions=[['Задняя линия, ближняя половина',2,2],['Задняя линия, дальний угол',2,8],['У сетки',7,5],['Задняя линия, другая половина',18,8]];
+function mounts(){ return cTwo? [[5,0],[15,0]] : [[10,0]]; }
+function drawPlan(){
+  const r=R[cDev], ms=mounts(), line=css('--line'), ink=css('--ink'), muted=css('--muted');
+  let h='';
+  h+=`<defs><clipPath id="cc"><rect x="${OX}" y="${OY}" width="${20*S}" height="${10*S}"/></clipPath></defs>`;
+  h+=`<rect x="${OX}" y="${OY}" width="${20*S}" height="${10*S}" fill="var(--court)" rx="2"/>`;
+  h+=`<g clip-path="url(#cc)">`+ms.map(([x,y])=>`<circle cx="${P(x,y)[0]}" cy="${P(x,y)[1]}" r="${r*S}" fill="#FFFFFF" fill-opacity=".22" stroke="#F1C823" stroke-width="2" stroke-dasharray="6 5"/>`).join('')+`</g>`;
+  const L=(x1,y1,x2,y2,w=2,c='rgba(255,255,255,.9)',d='')=>`<line x1="${P(x1,y1)[0]}" y1="${P(x1,y1)[1]}" x2="${P(x2,y2)[0]}" y2="${P(x2,y2)[1]}" stroke="${c}" stroke-width="${w}" ${d?`stroke-dasharray="${d}"`:''}/>`;
+  h+=L(3.05,0,3.05,10)+L(16.95,0,16.95,10)+L(3.05,5,16.95,5)+L(10,-.2,10,10.2,4,'#ffffff');
+  const glass='rgba(170,215,245,.95)';
+  h+=L(0,0,0,10,7,glass)+L(20,0,20,10,7,glass)+L(0,0,4,0,7,glass)+L(16,0,20,0,7,glass)+L(0,10,4,10,7,glass)+L(16,10,20,10,7,glass);
+  h+=L(4,0,16,0,4,ink,'2 4')+L(4,10,16,10,4,ink,'2 4');
+  positions.forEach(([n,x,y],i)=>{ const [px,py]=P(x,y); const ok=ms.some(([mx,my])=>Math.hypot(x-mx,y-my)<=r);
+    h+=`<circle cx="${px}" cy="${py}" r="10" fill="${ok?'#FFFFFF':'#0B1B28'}" stroke="${ok?'#1F8A5B':'#C8372D'}" stroke-width="3"/><text x="${px}" y="${py+4}" font-size="11" text-anchor="middle" font-weight="600" fill="${ok?'#0A1F2E':'#FFFFFF'}">${i+1}</text>`; });
+  ms.forEach(([x,y])=>{ const [px,py]=P(x,y); h+=`<rect x="${px-14}" y="${py-16}" width="28" height="12" rx="3" fill="#F1C823" stroke="#0A1F2E" stroke-width="1.5"/>`; });
+  h+=`<text x="${OX}" y="${OY-22}" font-size="12" fill="${muted}">сетка (боковая стена) · место крепления</text>`;
+  h+=`<text x="${OX}" y="${OY+10*S+24}" font-size="12" fill="${muted}">стекло — голубым, сетка — пунктиром</text>`;
+  h+=`<text x="${OX+20*S}" y="${OY+10*S+24}" font-size="12" fill="${muted}" text-anchor="end">20 × 10 м · 1 клетка сетки = 1 м</text>`;
+  h+=`<g fill="${muted}" font-size="11">`+[0,5,10,15,20].map(m=>`<text x="${P(m,0)[0]}" y="${OY+10*S+42}" text-anchor="middle">${m} м</text>`).join('')+`</g>`;
+  svg.innerHTML=h;
+  let inside=0,tot=0; for(let x=.05;x<20;x+=.1) for(let y=.05;y<10;y+=.1){ tot++; if(ms.some(([mx,my])=>Math.hypot(x-mx,y-my)<=r)) inside++; }
+  document.getElementById('covPct').textContent=Math.round(inside/tot*100)+'%';
+  document.getElementById('covPos').innerHTML=positions.map(([n,x,y],i)=>{ const ok=ms.some(([mx,my])=>Math.hypot(x-mx,y-my)<=r); return `<div><span>${i+1}. ${n}</span><span class="${ok?'yes':'no'}">${ok?'видно':'не видно'}</span></div>`; }).join('');
+}
+const cPhone=document.getElementById('cPhone'), cTab=document.getElementById('cTab'), cOne=document.getElementById('cOne'), cTwoB=document.getElementById('cTwo');
+cPhone.onclick=()=>{cDev='phone';seg(cPhone,cTab);drawPlan();};
+cTab.onclick=()=>{cDev='tab';seg(cTab,cPhone);drawPlan();};
+cOne.onclick=()=>{cTwo=false;seg(cOne,cTwoB);drawPlan();};
+cTwoB.onclick=()=>{cTwo=true;seg(cTwoB,cOne);drawPlan();};
+drawPlan();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawPlan);
+})();
+</script>
+</body>
+</html>
